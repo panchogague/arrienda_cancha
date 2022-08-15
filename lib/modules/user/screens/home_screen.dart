@@ -8,6 +8,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           const BackgroundCurve(),
@@ -21,11 +22,12 @@ class HomeScreen extends StatelessWidget {
               SizedBox(
                 height: 20,
               ),
-              Categories()
+              Categories(),
             ],
           ),
         ],
       ),
+      bottomNavigationBar: const BottomNavbar(),
     );
   }
 }

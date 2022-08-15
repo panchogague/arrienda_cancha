@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:court_finder/theme/myTheme.dart';
+import 'package:court_finder/theme/my_theme.dart';
 import 'package:court_finder/modules/user/screens/screens.dart';
 
 void main() => runApp(const MyApp());
