@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class PitchScreen extends StatelessWidget {
-  const PitchScreen({Key? key}) : super(key: key);
+class CourtScreen extends StatelessWidget {
+  const CourtScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

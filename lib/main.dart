@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       routes: {
         'home': (_) => const HomeScreen(),
         'search': (_) => const HomeScreen(),
-        'pitch': (_) => const PitchScreen(),
+        'court': (_) => const CourtScreen(),
       },
     );
   }
