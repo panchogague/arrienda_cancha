@@ -1,3 +1,9 @@
+export 'package:court_finder/modules/user/widgets/rating.dart';
+
+export 'package:court_finder/modules/user/widgets/court_card.dart';
+
+export 'package:court_finder/modules/user/widgets/popular_courts.dart';
+
 export 'package:court_finder/modules/user/widgets/ui/bottom_navbar.dart';
 
 export 'package:court_finder/modules/user/widgets/categories.dart';

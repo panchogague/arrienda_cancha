@@ -12,18 +12,25 @@ class HomeScreen extends StatelessWidget {
       body: Stack(
         children: [
           const BackgroundCurve(),
-          Column(
-            children: const [
-              CustomAppBar(),
-              SizedBox(
-                height: 30,
-              ),
-              CustomSearchBar(),
-              SizedBox(
-                height: 20,
-              ),
-              Categories(),
-            ],
+          SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              children: const [
+                CustomAppBar(),
+                SizedBox(
+                  height: 30,
+                ),
+                CustomSearchBar(),
+                SizedBox(
+                  height: 20,
+                ),
+                Categories(),
+                SizedBox(
+                  height: 20,
+                ),
+                PopularCourts()
+              ],
+            ),
           ),
         ],
       ),

@@ -10,10 +10,9 @@ class CustomAppBar extends StatelessWidget {
       child: Container(
         width: double.infinity,
         alignment: Alignment.topCenter,
-        height: 60,
         color: Colors.transparent,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             const Icon(FontAwesomeIcons.bars),
@@ -30,7 +29,7 @@ class CustomAppBar extends StatelessWidget {
                     style: TextStyle(fontSize: 12, color: Colors.blueGrey),
                   )
                 ]),
-            _Avatar()
+            const _Avatar()
           ]),
         ),
       ),

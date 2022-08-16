@@ -56,15 +56,6 @@ class _Title extends StatelessWidget {
               ],
             ),
           ),
-          const Spacer(),
-          const Icon(
-            FontAwesomeIcons.arrowRightLong,
-            size: 18,
-            color: Colors.black87,
-          ),
-          const SizedBox(
-            width: 10,
-          )
         ],
       ),
     );
@@ -82,7 +73,7 @@ class _CategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    bool showTotal = size.height > 700.0;
+    bool showTotal = size.height > 740.0;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8),
       child: Stack(
@@ -126,9 +117,7 @@ class _CategoryCard extends StatelessWidget {
                         Text('DESCUBRE',
                             style:
                                 TextStyle(color: Colors.white54, fontSize: 10)),
-                        SizedBox(
-                          width: 5,
-                        ),
+                        Spacer(),
                         Icon(
                           FontAwesomeIcons.arrowRightLong,
                           color: Colors.white54,

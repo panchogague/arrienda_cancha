@@ -5,9 +5,10 @@ class BackgroundCurve extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       height: double.infinity,
       width: double.infinity,
+      color: Colors.white70,
       child: CustomPaint(
         painter: _CurvePainter(),
       ),

@@ -19,19 +19,18 @@ class CustomSearchBar extends StatelessWidget {
 
   InputDecoration _decoration() {
     return const InputDecoration(
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(50)),
-          borderSide: BorderSide(color: Colors.white),
-        ),
-        fillColor: Colors.white,
-        filled: true,
-        hintStyle: TextStyle(fontSize: 15),
-        hintText: 'Donde quieres jugar hoy?',
-        suffixIcon: Icon(Icons.search),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(50)),
-        ),
-        isDense: true,
-        contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 8));
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(50)),
+        borderSide: BorderSide(color: Colors.white),
+      ),
+      fillColor: Colors.white,
+      filled: true,
+      hintStyle: TextStyle(fontSize: 15),
+      hintText: 'Donde quieres jugar hoy?',
+      suffixIcon: Icon(Icons.search),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(50)),
+      ),
+    );
   }
 }
