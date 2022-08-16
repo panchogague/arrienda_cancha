@@ -74,95 +74,99 @@ class _CategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     bool showTotal = size.height > 740.0;
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8),
-      child: Stack(
-        children: [
-          const SizedBox(
-            width: 150,
-          ),
-          Container(
-            width: 140,
-            height: size.height * 0.25,
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [category.primaryColor, category.secondaryColor]),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey.withOpacity(0.9),
-                      blurRadius: 5,
-                      offset: const Offset(4, 8) // changes position of shadow
-                      )
-                ],
-                borderRadius: BorderRadius.circular(15)),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      category.name,
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Row(
-                      children: const [
-                        Text('DESCUBRE',
-                            style:
-                                TextStyle(color: Colors.white54, fontSize: 10)),
-                        Spacer(),
-                        Icon(
-                          FontAwesomeIcons.arrowRightLong,
-                          color: Colors.white54,
-                          size: 15,
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    if (showTotal)
-                      RotatedBox(
-                        quarterTurns: -1,
-                        child: Text('${category.totalPlaces} CANCHAS',
-                            style: const TextStyle(
-                              color: Colors.black54,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                            )),
-                      )
-                  ]),
+    return GestureDetector(
+      onTap: () => Navigator.pushNamed(context, 'search', arguments: category),
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8),
+        child: Stack(
+          children: [
+            const SizedBox(
+              width: 150,
             ),
-          ),
-          Positioned.fill(
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: Container(
-                width: 100,
-                height: size.height * 0.10,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  // boxShadow: [
-                  //   BoxShadow(
-                  //       color: Colors.grey.withOpacity(0.9),
-                  //       blurRadius: 5,
-                  //       offset: const Offset(4, 8) // changes position of shadow
-                  //       )
-                  //]
-                ),
-                child: Image(
-                    fit: BoxFit.contain, image: AssetImage(category.imgUrl)),
+            Container(
+              width: 140,
+              height: size.height * 0.25,
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [category.primaryColor, category.secondaryColor]),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.grey.withOpacity(0.9),
+                        blurRadius: 5,
+                        offset: const Offset(4, 8) // changes position of shadow
+                        )
+                  ],
+                  borderRadius: BorderRadius.circular(15)),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        category.name,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        children: const [
+                          Text('DESCUBRE',
+                              style: TextStyle(
+                                  color: Colors.white54, fontSize: 10)),
+                          Spacer(),
+                          Icon(
+                            FontAwesomeIcons.arrowRightLong,
+                            color: Colors.white54,
+                            size: 15,
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      if (showTotal)
+                        RotatedBox(
+                          quarterTurns: -1,
+                          child: Text('${category.totalPlaces} CANCHAS',
+                              style: const TextStyle(
+                                color: Colors.black54,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              )),
+                        )
+                    ]),
               ),
             ),
-          )
-        ],
+            Positioned.fill(
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: Container(
+                  width: 100,
+                  height: size.height * 0.10,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    // boxShadow: [
+                    //   BoxShadow(
+                    //       color: Colors.grey.withOpacity(0.9),
+                    //       blurRadius: 5,
+                    //       offset: const Offset(4, 8) // changes position of shadow
+                    //       )
+                    //]
+                  ),
+                  child: Image(
+                      fit: BoxFit.contain, image: AssetImage(category.imgUrl)),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:court_finder/modules/user/models/models.dart';
 import 'package:flutter/material.dart';
 
 class SearchScreen extends StatelessWidget {
@@ -5,9 +6,12 @@ class SearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    final CategoryModel category =
+        ModalRoute.of(context)!.settings.arguments as CategoryModel;
+    return Scaffold(
+      appBar: AppBar(title: Text(category.name)),
       body: Center(
-        child: Text('SearchScreen'),
+        child: Text(category.name),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:court_finder/modules/user/models/models.dart';
 import 'package:flutter/material.dart';
 
 class CourtScreen extends StatelessWidget {
@@ -5,9 +6,12 @@ class CourtScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    final CourtModel court =
+        ModalRoute.of(context)!.settings.arguments as CourtModel;
+    return Scaffold(
+      appBar: AppBar(title: Text(court.name)),
       body: Center(
-        child: Text('PitchScreen'),
+        child: Text(court.name),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:court_finder/modules/user/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -29,40 +30,12 @@ class CustomAppBar extends StatelessWidget {
                     style: TextStyle(fontSize: 12, color: Colors.blueGrey),
                   )
                 ]),
-            const _Avatar()
+            const UserAvatar(
+              imgUrl:
+                  'https://www.eaglesvine.com/wp-content/uploads/2021/06/Gabbie-Carter_05.jpg',
+            )
           ]),
         ),
-      ),
-    );
-  }
-}
-
-class _Avatar extends StatelessWidget {
-  const _Avatar({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 50,
-      width: 50,
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.white60, width: 2),
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              blurRadius: 6,
-              offset: const Offset(4, 8), // Shadow position
-            ),
-          ]),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(10),
-        child: const Image(
-            fit: BoxFit.fill,
-            image: NetworkImage(
-                'https://www.eaglesvine.com/wp-content/uploads/2021/06/Gabbie-Carter_05.jpg')),
       ),
     );
   }
