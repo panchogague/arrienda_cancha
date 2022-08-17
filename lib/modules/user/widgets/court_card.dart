@@ -66,9 +66,10 @@ class _Image extends StatelessWidget {
           SizedBox(
             width: size.width * 0.95,
             height: 150,
-            child: Image.network(
-              urlImg,
+            child: FadeInImage(
+              image: NetworkImage(urlImg),
               fit: BoxFit.fill,
+              placeholder: const AssetImage('assets/loading.gif'),
             ),
           ),
           if (rating != null)

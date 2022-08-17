@@ -32,7 +32,11 @@ class UserAvatar extends StatelessWidget {
           ]),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(40),
-        child: Image(fit: BoxFit.fill, image: NetworkImage(imgUrl)),
+        child: FadeInImage(
+          fit: BoxFit.fill,
+          image: NetworkImage(imgUrl),
+          placeholder: const AssetImage('assets/loading.gif'),
+        ),
       ),
     );
   }

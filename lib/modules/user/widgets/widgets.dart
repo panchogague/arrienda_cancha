@@ -1,3 +1,5 @@
+export 'package:court_finder/modules/user/widgets/court_card2.dart';
+
 export 'package:court_finder/modules/user/widgets/user_avatar.dart';
 
 export 'package:court_finder/modules/user/widgets/rating.dart';

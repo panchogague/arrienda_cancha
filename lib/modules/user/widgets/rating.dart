@@ -6,13 +6,15 @@ class Rating extends StatelessWidget {
       required this.rating,
       this.radius = 40,
       this.width = 62,
-      this.height = 28})
+      this.height = 28,
+      this.showShadow = false})
       : super(key: key);
 
   final double rating;
   final double radius;
   final double width;
   final double height;
+  final bool showShadow;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,16 @@ class Rating extends StatelessWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(radius)),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(radius),
+          boxShadow: [
+            if (showShadow)
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                blurRadius: 6,
+                offset: const Offset(4, 8), // Shadow position
+              ),
+          ]),
       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         const Icon(
           Icons.star,

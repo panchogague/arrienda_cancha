@@ -1,6 +1,8 @@
+import 'package:court_finder/modules/user/providers/providers.dart';
 import 'package:court_finder/modules/user/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class CustomAppBar extends StatelessWidget {
   const CustomAppBar({Key? key}) : super(key: key);
@@ -16,7 +18,13 @@ class CustomAppBar extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            const Icon(FontAwesomeIcons.bars),
+            IconButton(
+                onPressed: () {
+                  final key = Provider.of<UIProvider>(context, listen: false)
+                      .scaffoldKey;
+                  key.currentState!.openDrawer();
+                },
+                icon: const Icon(FontAwesomeIcons.bars)),
             Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
