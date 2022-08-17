@@ -15,7 +15,10 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => UIProvider(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (_) => PickerSlotProvider(),
+        ),
       ],
       child: MaterialApp(
         title: 'Material App',

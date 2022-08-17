@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       key: key,
-      drawer: Drawer(),
+      drawer: const Drawer(),
       body: Stack(
         children: [
           const BackgroundCurve(),

@@ -27,6 +27,7 @@ class CourtCard extends StatelessWidget {
               _Image(
                 urlImg: court.imgUrl,
                 rating: court.rating,
+                tagId: court.id,
               ),
               const SizedBox(
                 height: 2,
@@ -51,10 +52,12 @@ class _Image extends StatelessWidget {
     Key? key,
     required this.urlImg,
     required this.rating,
+    required this.tagId,
   }) : super(key: key);
 
   final String urlImg;
   final double? rating;
+  final String tagId;
 
   @override
   Widget build(BuildContext context) {
@@ -66,10 +69,13 @@ class _Image extends StatelessWidget {
           SizedBox(
             width: size.width * 0.95,
             height: 150,
-            child: FadeInImage(
-              image: NetworkImage(urlImg),
-              fit: BoxFit.fill,
-              placeholder: const AssetImage('assets/loading.gif'),
+            child: Hero(
+              tag: tagId,
+              child: FadeInImage(
+                image: NetworkImage(urlImg),
+                fit: BoxFit.fill,
+                placeholder: const AssetImage('assets/loading.gif'),
+              ),
             ),
           ),
           if (rating != null)

@@ -6,9 +6,10 @@ class CustomTheme {
   static const Color subTitle = Colors.grey;
 
   static final myTheme = ThemeData.light().copyWith(
+      primaryColor: const Color(0xffF34F57),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-    selectedLabelStyle: TextStyle(fontSize: 12),
-    selectedItemColor: Color(0xffF34F57),
-    showUnselectedLabels: false,
-  ));
+        selectedLabelStyle: TextStyle(fontSize: 12),
+        selectedItemColor: Color(0xffF34F57),
+        showUnselectedLabels: false,
+      ));
 }

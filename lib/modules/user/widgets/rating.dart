@@ -7,7 +7,9 @@ class Rating extends StatelessWidget {
       this.radius = 40,
       this.width = 62,
       this.height = 28,
-      this.showShadow = false})
+      this.showShadow = false,
+      this.color = Colors.white,
+      this.textColor = Colors.black})
       : super(key: key);
 
   final double rating;
@@ -15,6 +17,8 @@ class Rating extends StatelessWidget {
   final double width;
   final double height;
   final bool showShadow;
+  final Color color;
+  final Color textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +26,7 @@ class Rating extends StatelessWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: color,
           borderRadius: BorderRadius.circular(radius),
           boxShadow: [
             if (showShadow)
@@ -43,7 +47,8 @@ class Rating extends StatelessWidget {
         ),
         Text(
           rating.toStringAsFixed(1),
-          style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14),
+          style: TextStyle(
+              fontWeight: FontWeight.w800, fontSize: 14, color: textColor),
         )
       ]),
     );

@@ -81,6 +81,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "10.1.0"
+  horizontal_center_date_picker:
+    dependency: "direct main"
+    description:
+      name: horizontal_center_date_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.1"
+  intl:
+    dependency: transitive
+    description:
+      name: intl
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.17.0"
   lints:
     dependency: transitive
     description:
