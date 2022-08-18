@@ -19,6 +19,12 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => PickerSlotProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => CourtProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => BookingProvider(),
+        ),
       ],
       child: MaterialApp(
         title: 'Court Finder App',

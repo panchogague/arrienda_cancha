@@ -12,34 +12,38 @@ class CourtCard2 extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     bool isNormalScreen = size.width > 320.0;
-    return Card(
-      child: SizedBox(
-        width: double.infinity,
-        height: 200,
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Row(children: [
-            _ImageAndRating(
-              imgUrl: court.imgUrl,
-              rate: court.rating,
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            _Content(
-              title: court.name,
-              location: court.location,
-              price: court.price,
-            ),
-            const Spacer(),
-            if (isNormalScreen)
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    FontAwesomeIcons.heart,
-                    color: Colors.grey,
-                  )),
-          ]),
+    return GestureDetector(
+      onTap: () => Navigator.pushNamed(context, 'court', arguments: court),
+      child: Card(
+        child: SizedBox(
+          width: double.infinity,
+          height: 200,
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(children: [
+              _ImageAndRating(
+                imgUrl: court.imgUrl,
+                rate: court.rating,
+                tagId: court.id,
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              _Content(
+                title: court.name,
+                location: court.location,
+                price: court.price,
+              ),
+              const Spacer(),
+              if (isNormalScreen)
+                IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      FontAwesomeIcons.heart,
+                      color: Colors.grey,
+                    )),
+            ]),
+          ),
         ),
       ),
     );
@@ -139,8 +143,10 @@ class _ImageAndRating extends StatelessWidget {
     Key? key,
     required this.imgUrl,
     required this.rate,
+    required this.tagId,
   }) : super(key: key);
 
+  final String tagId;
   final String imgUrl;
   final double? rate;
 
@@ -158,10 +164,13 @@ class _ImageAndRating extends StatelessWidget {
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: FadeInImage(
-              placeholder: const AssetImage('assets/loading.gif'),
-              image: NetworkImage(imgUrl),
-              fit: BoxFit.fill,
+            child: Hero(
+              tag: tagId,
+              child: FadeInImage(
+                placeholder: const AssetImage('assets/loading.gif'),
+                image: NetworkImage(imgUrl),
+                fit: BoxFit.fill,
+              ),
             ),
           ),
         ),

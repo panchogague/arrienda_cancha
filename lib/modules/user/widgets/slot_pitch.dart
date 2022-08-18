@@ -3,18 +3,19 @@ import 'package:court_finder/modules/user/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class SlotTime extends StatelessWidget {
-  const SlotTime(
+class SlotPitch extends StatelessWidget {
+  const SlotPitch(
       {Key? key,
-      required this.slotHours,
+      required this.pitch,
       this.selectedColor = const Color(0xffF34F57),
+      this.isAvailable = true,
       required this.index})
       : super(key: key);
 
-  final SlotTimeModel slotHours;
+  final PitchModel pitch;
 
   final Color selectedColor;
-
+  final bool isAvailable;
   final int index;
 
   @override
@@ -23,8 +24,7 @@ class SlotTime extends StatelessWidget {
 
     //TODO:refactorizar código
 
-    bool isAvailable = slotHours.isAvailable;
-    bool isSelected = pickerProvider.selectedIndex == index;
+    bool isSelected = pickerProvider.selectedPitchIndex == index;
 
     Color textColor = isSelected ? Colors.white : Colors.black87;
     Color backgroundColor = Colors.white;
@@ -42,16 +42,15 @@ class SlotTime extends StatelessWidget {
       onTap: () {
         if (!isAvailable) return;
 
-        pickerProvider.selectedIndex = index;
-
+        pickerProvider.selectedPitchIndex = index;
         final bookingProvider =
             Provider.of<BookingProvider>(context, listen: false);
-        bookingProvider.slot = slotHours;
+        bookingProvider.pitch = pitch;
       },
       child: Container(
-        width: 80,
+        width: 145,
         padding: const EdgeInsets.all(5),
-        margin: const EdgeInsets.all(10),
+        margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
             color: backgroundColor,
             borderRadius: BorderRadius.circular(20),
@@ -63,12 +62,18 @@ class SlotTime extends StatelessWidget {
                   offset: const Offset(2, 4), // Shadow position
                 ),
             ]),
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(slotHours.from, style: style),
-              Text(slotHours.to, style: style)
-            ]),
+        child:
+            Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          Text(
+            pitch.name,
+            style: style,
+          ),
+          Text(pitch.size, style: TextStyle(color: textColor, fontSize: 12)),
+          Text(
+            pitch.priceFormated,
+            style: style,
+          )
+        ]),
       ),
     );
   }
