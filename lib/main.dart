@@ -21,9 +21,9 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'Material App',
+        title: 'Court Finder App',
         debugShowCheckedModeBanner: false,
-        theme: CustomTheme.myTheme,
+        theme: myTheme,
         initialRoute: 'home',
         routes: {
           'home': (_) => const HomeScreen(),

@@ -1,7 +1,7 @@
-import 'package:court_finder/modules/user/models/models.dart';
-import 'package:court_finder/modules/user/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:court_finder/modules/user/models/models.dart';
+import 'package:court_finder/modules/user/widgets/widgets.dart';
 
 class PopularCourts extends StatelessWidget {
   const PopularCourts({Key? key}) : super(key: key);
@@ -19,13 +19,13 @@ class PopularCourts extends StatelessWidget {
             child: Row(
               children: [
                 RichText(
-                  text: const TextSpan(
+                  text: TextSpan(
                     text: 'Canchas ',
-                    style: TextStyle(fontSize: 18, color: Colors.black87),
+                    style: Theme.of(context).textTheme.headline3,
                     children: <TextSpan>[
                       TextSpan(
                           text: ' Populares',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                          style: Theme.of(context).textTheme.headline2),
                     ],
                   ),
                 ),
@@ -38,7 +38,7 @@ class PopularCourts extends StatelessWidget {
           ),
           const SizedBox(height: 30),
           SizedBox(
-            height: 245,
+            height: 250,
             width: double.infinity,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,

@@ -1,8 +1,7 @@
-import 'package:court_finder/modules/user/models/models.dart';
-import 'package:court_finder/modules/user/widgets/rating.dart';
-import 'package:court_finder/theme/my_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:court_finder/modules/user/models/models.dart';
+import 'package:court_finder/modules/user/widgets/rating.dart';
 
 class CourtCard2 extends StatelessWidget {
   const CourtCard2(this.court, {Key? key}) : super(key: key);
@@ -12,7 +11,7 @@ class CourtCard2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    bool isNormalScreen = size.height > 740.0;
+    bool isNormalScreen = size.width > 320.0;
     return Card(
       child: SizedBox(
         width: double.infinity,
@@ -75,25 +74,15 @@ class _Content extends StatelessWidget {
             location,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-                color: CustomTheme.subTitle,
-                fontWeight: FontWeight.w500,
-                fontSize: 12),
+            style: Theme.of(context).textTheme.subtitle1,
           ),
           Text(title,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               softWrap: false,
-              style: const TextStyle(
-                  color: CustomTheme.textColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18)),
+              style: Theme.of(context).textTheme.headline2),
           const _Facilities(),
-          Text(price,
-              style: const TextStyle(
-                  color: CustomTheme.textColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16))
+          Text(price, style: Theme.of(context).textTheme.bodyText1)
         ],
       ),
     );
@@ -107,34 +96,28 @@ class _Facilities extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const facilities = [
+    final facilities = [
       Icon(
         Icons.layers_outlined,
-        color: CustomTheme.iconColor,
+        color: Theme.of(context).primaryColor,
         size: 20,
       ),
       Text('Pasto Sintético',
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-              color: CustomTheme.textColor,
-              fontWeight: FontWeight.w600,
-              fontSize: 12)),
-      SizedBox(
+          style: Theme.of(context).textTheme.subtitle2),
+      const SizedBox(
         width: 5,
       ),
       Icon(
         Icons.sunny,
-        color: CustomTheme.iconColor,
+        color: Theme.of(context).primaryColor,
         size: 20,
       ),
       Text('Outdoor',
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-              color: CustomTheme.textColor,
-              fontWeight: FontWeight.w600,
-              fontSize: 12)),
+          style: Theme.of(context).textTheme.subtitle2)
     ];
 
     final size = MediaQuery.of(context).size;
@@ -142,9 +125,9 @@ class _Facilities extends StatelessWidget {
 
     return isNormalScreen
         ? Row(children: facilities)
-        : Column(crossAxisAlignment: CrossAxisAlignment.start, children: const [
+        : Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             ...facilities,
-            SizedBox(
+            const SizedBox(
               height: 3,
             )
           ]);

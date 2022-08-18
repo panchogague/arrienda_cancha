@@ -42,17 +42,13 @@ class _Title extends StatelessWidget {
       child: Row(
         children: [
           RichText(
-            text: const TextSpan(
+            text: TextSpan(
               text: 'Elige ',
-              style: TextStyle(
-                  color: Colors.black87,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.headline3,
               children: <TextSpan>[
                 TextSpan(
                     text: ' una categoría',
-                    style: TextStyle(
-                        color: Colors.black87, fontWeight: FontWeight.normal)),
+                    style: Theme.of(context).textTheme.headline2),
               ],
             ),
           ),
@@ -73,7 +69,7 @@ class _CategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    bool showTotal = size.height > 740.0;
+
     return GestureDetector(
       onTap: () => Navigator.pushNamed(context, 'search', arguments: category),
       child: Container(
@@ -128,19 +124,7 @@ class _CategoryCard extends StatelessWidget {
                           )
                         ],
                       ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      if (showTotal)
-                        RotatedBox(
-                          quarterTurns: -1,
-                          child: Text('${category.totalPlaces} CANCHAS',
-                              style: const TextStyle(
-                                color: Colors.black54,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              )),
-                        )
+                      _TotalCanchas(category.totalPlaces),
                     ]),
               ),
             ),
@@ -169,5 +153,43 @@ class _CategoryCard extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class _TotalCanchas extends StatelessWidget {
+  const _TotalCanchas(
+    this.totalPlaces, {
+    Key? key,
+  }) : super(key: key);
+
+  final int totalPlaces;
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    bool showTotal = size.height > 740.0;
+
+    return showTotal
+        ? Column(
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              RotatedBox(
+                quarterTurns: -1,
+                child: Text('$totalPlaces CANCHAS',
+                    style: Theme.of(context).textTheme.bodyText2),
+              ),
+            ],
+          )
+        : Column(
+            children: [
+              const SizedBox(
+                height: 5,
+              ),
+              Text('$totalPlaces CANCHAS',
+                  style: Theme.of(context).textTheme.subtitle2),
+            ],
+          );
   }
 }

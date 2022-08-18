@@ -28,7 +28,7 @@ class _DatePickerHorizontalState extends State<DatePickerHorizontal> {
         selectedDate: now,
         widgetWidth: MediaQuery.of(context).size.width,
         datePickerController: _datePickerController,
-        selectedColor: CustomTheme.myTheme.primaryColor,
+        selectedColor: myTheme.primaryColor,
         onValueSelected: (date) {
           print('selected = ${date.toIso8601String()}');
         },

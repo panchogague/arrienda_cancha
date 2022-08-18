@@ -13,7 +13,7 @@ class CourtCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => Navigator.pushNamed(context, 'court', arguments: court),
       child: SizedBox(
-        height: 245,
+        height: 250,
         width: size.width * 0.95,
         child: Card(
           clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -30,7 +30,7 @@ class CourtCard extends StatelessWidget {
                 tagId: court.id,
               ),
               const SizedBox(
-                height: 2,
+                height: 5,
               ),
               _BottomSection(
                 title: court.name,
@@ -105,7 +105,7 @@ class _BottomSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    double sizeAvatar = 40.0;
+    double sizeAvatar = 35.0;
     double commentSize = 10.0;
 
     if (size.height < 740.0) {
@@ -187,6 +187,7 @@ class _Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
@@ -195,25 +196,32 @@ class _Title extends StatelessWidget {
           children: [
             Text(
               title,
-              style: const TextStyle(
-                  color: Colors.black87,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16),
+              style: Theme.of(context).textTheme.bodyText1,
             ),
             const SizedBox(
               height: 5,
             ),
-            Row(
-              children: [
-                const Icon(
-                  Icons.location_on_outlined,
-                  color: Colors.blueGrey,
-                  size: 14,
-                ),
-                Text(location,
-                    style:
-                        const TextStyle(color: Colors.blueGrey, fontSize: 12)),
-              ],
+            SizedBox(
+              width: size.width * 0.60,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Icon(
+                    Icons.location_on_outlined,
+                    color: Colors.blueGrey,
+                    size: 14,
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Text(location,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        softWrap: false,
+                        style: const TextStyle(
+                            color: Colors.blueGrey, fontSize: 11)),
+                  ),
+                ],
+              ),
             )
           ]),
     );

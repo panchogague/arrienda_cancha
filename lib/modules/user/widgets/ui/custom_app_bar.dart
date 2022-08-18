@@ -1,8 +1,8 @@
 import 'package:court_finder/modules/user/providers/providers.dart';
-import 'package:court_finder/modules/user/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:court_finder/modules/user/widgets/widgets.dart';
 
 class CustomAppBar extends StatelessWidget {
   const CustomAppBar({Key? key}) : super(key: key);
@@ -25,23 +25,32 @@ class CustomAppBar extends StatelessWidget {
                   key.currentState!.openDrawer();
                 },
                 icon: const Icon(FontAwesomeIcons.bars)),
-            Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(
-                    Icons.location_on_outlined,
-                    size: 16,
-                    color: Colors.blueGrey,
-                  ),
-                  Text(
-                    'Villa Alemana, Valparaíso.',
-                    style: TextStyle(fontSize: 12, color: Colors.blueGrey),
-                  )
-                ]),
-            const UserAvatar(
-              imgUrl:
-                  'https://www.eaglesvine.com/wp-content/uploads/2021/06/Gabbie-Carter_05.jpg',
+            Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              const Icon(
+                Icons.location_on_outlined,
+                size: 16,
+                color: Colors.blueGrey,
+              ),
+              Text(
+                'Villa Alemana, Valparaíso.',
+                style: Theme.of(context).textTheme.subtitle1,
+              )
+            ]),
+            SizedBox(
+              width: 45,
+              height: 45,
+              child: FloatingActionButton(
+                elevation: 0,
+                onPressed: () {},
+                backgroundColor: Colors.transparent,
+                child: const BellNotification(),
+              ),
             )
+
+            // const UserAvatar(
+            //   imgUrl:
+            //       'https://www.eaglesvine.com/wp-content/uploads/2021/06/Gabbie-Carter_05.jpg',
+            // )
           ]),
         ),
       ),
