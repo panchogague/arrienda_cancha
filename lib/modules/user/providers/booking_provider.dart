@@ -48,33 +48,8 @@ class BookingProvider extends ChangeNotifier {
 
   //Animation
 
-  AnimationController? _priceAnimationController;
-  AnimationController? get priceAnimationController =>
-      _priceAnimationController;
-
-  set priceAnimationController(value) {
-    _priceAnimationController = value;
-  }
-
-  AnimationController? _pitchAnimationController;
-  AnimationController? get pitchAnimationController =>
-      _pitchAnimationController;
-
-  set pitchAnimationController(value) {
-    _pitchAnimationController = value;
-  }
-
-  AnimationController? _dateAnimationController;
-  AnimationController? get dateAnimationController => _dateAnimationController;
-
-  set dateAnimationController(value) {
-    _dateAnimationController = value;
-  }
-
-  AnimationController? _slotAnimationController;
-  AnimationController? get slotAnimationController => _slotAnimationController;
-
-  set slotAnimationController(value) {
-    _slotAnimationController = value;
-  }
+  AnimationController? priceAnimationController;
+  AnimationController? pitchAnimationController;
+  AnimationController? dateAnimationController;
+  AnimationController? slotAnimationController;
 }
