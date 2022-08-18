@@ -44,6 +44,10 @@ class BookingProvider extends ChangeNotifier {
     _selectedDate = DateTime.now();
     _slot = null;
     _pitch = null;
+    priceAnimationController = null;
+    pitchAnimationController = null;
+    dateAnimationController = null;
+    slotAnimationController = null;
   }
 
   //Animation

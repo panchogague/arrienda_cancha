@@ -73,7 +73,7 @@ class _Booking extends StatelessWidget {
                     Container(
                       height: 45,
                       width: double.infinity,
-                      color: const Color(0xff065781),
+                      color: const Color(0xff281853),
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
