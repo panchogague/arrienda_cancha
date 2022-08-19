@@ -1,9 +1,11 @@
-import 'package:animate_do/animate_do.dart';
-import 'package:court_finder/modules/user/providers/providers.dart';
 import 'package:flutter/material.dart';
-import 'package:court_finder/modules/user/models/models.dart';
-import 'package:court_finder/modules/user/widgets/widgets.dart';
+import 'package:animate_do/animate_do.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:maps_launcher/maps_launcher.dart';
+import 'package:court_finder/modules/user/providers/providers.dart';
+import 'package:court_finder/modules/user/widgets/widgets.dart';
+import 'package:court_finder/modules/user/models/models.dart';
 
 class CourtScreen extends StatelessWidget {
   const CourtScreen({Key? key}) : super(key: key);
@@ -216,18 +218,18 @@ class _Content extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     const DatePickerHorizontal(),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 15),
                     Text('Selecciona slot',
                         style: Theme.of(context).textTheme.headline5),
                     const _SlotPicker(),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 15),
                     Text('Selecciona cancha',
                         style: Theme.of(context).textTheme.headline5),
                     const _PitchPicker()
                   ]),
             ),
-            const SizedBox(height: 20),
-            _Information()
+            const SizedBox(height: 12),
+            const _Information()
           ],
         ),
       ),
@@ -242,18 +244,170 @@ class _Information extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final court = Provider.of<CourtProvider>(context).courtSelected;
     return Container(
       width: double.infinity,
       color: const Color(0xffF0EEEF),
       child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(children: const [
-          Text('Como llegar'),
-          Text('Descripción'),
-          Text(
-              'Aliquip adipisicing sint veniam aliqua minim mollit pariatur consequat. Cillum pariatur mollit cillum tempor minim sunt. Officia qui labore aliqua dolor aliquip enim laborum ea non anim. In magna dolor aliquip in ea ad in est sit. Voluptate do in ut incididunt nulla anim et qui et quis consectetur laboris velit laboris. Anim nulla magna dolor et qui. Minim do velit minim nostrud excepteur esse.'),
-          Text('Facilidades')
+        padding: const EdgeInsets.all(15),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          _MapInfo(court!.location),
+          const _FacilitiesInfo(),
+          _TextInfo(
+            title: IconText(
+                text: 'Descripción',
+                icon: Icon(
+                  Icons.description_outlined,
+                  color: Theme.of(context).primaryColor,
+                  size: 18,
+                ),
+                style: Theme.of(context).textTheme.headline5),
+            paragraph: court.description,
+          ),
+          _TextInfo(
+            title: IconText(
+                text: 'Cómo acceder al recinto',
+                icon: Icon(
+                  FontAwesomeIcons.key,
+                  color: Theme.of(context).primaryColor,
+                  size: 18,
+                ),
+                style: Theme.of(context).textTheme.headline5),
+            paragraph: court.howToAccess,
+          ),
+          _TextInfo(
+            title: IconText(
+                text: 'Cancelación',
+                icon: Icon(
+                  Icons.cancel_outlined,
+                  color: Theme.of(context).primaryColor,
+                  size: 18,
+                ),
+                style: Theme.of(context).textTheme.headline5),
+            paragraph: court.cancellationPolicy,
+          ),
         ]),
+      ),
+    );
+  }
+}
+
+class _MapInfo extends StatelessWidget {
+  const _MapInfo(
+    this.location, {
+    Key? key,
+  }) : super(key: key);
+
+  final String location;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(10),
+      child: Column(
+        children: [
+          IconText(
+              text: 'Como llegar',
+              icon: Icon(
+                Icons.location_on_outlined,
+                color: Theme.of(context).primaryColor,
+                size: 18,
+              ),
+              style: Theme.of(context).textTheme.headline5),
+          const SizedBox(height: 10),
+          GestureDetector(
+            onTap: () => MapsLauncher.launchQuery(location),
+            child: Container(
+                height: 200,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('assets/vxaMap.png'),
+                      fit: BoxFit.fitHeight),
+                )),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class _FacilitiesInfo extends StatelessWidget {
+  const _FacilitiesInfo({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(10),
+      child: Column(
+        children: [
+          IconText(
+              text: 'Facilidades',
+              icon: Icon(
+                FontAwesomeIcons.futbol,
+                color: Theme.of(context).primaryColor,
+                size: 18,
+              ),
+              style: Theme.of(context).textTheme.headline5),
+          const SizedBox(height: 10),
+          SizedBox(
+            height: 120,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView(
+                physics: const BouncingScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                children: const [
+                  FacilityCard(
+                    icon: FontAwesomeIcons.toilet,
+                    title: 'Baños',
+                  ),
+                  FacilityCard(
+                    icon: Icons.shower,
+                    title: 'Duchas',
+                  ),
+                  FacilityCard(
+                    icon: FontAwesomeIcons.shop,
+                    title: 'Kiosco',
+                  ),
+                  FacilityCard(
+                    icon: FontAwesomeIcons.wheelchair,
+                    title: 'Accesso',
+                  ),
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class _TextInfo extends StatelessWidget {
+  const _TextInfo({
+    Key? key,
+    required this.title,
+    required this.paragraph,
+  }) : super(key: key);
+
+  final IconText title;
+  final String paragraph;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(10),
+      child: Column(
+        children: [
+          title,
+          const SizedBox(height: 10),
+          Text(
+            paragraph,
+            style: Theme.of(context).textTheme.bodyText2,
+          )
+        ],
       ),
     );
   }

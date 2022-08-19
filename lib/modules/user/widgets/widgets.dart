@@ -1,3 +1,7 @@
+export 'package:court_finder/modules/user/widgets/facility_card.dart';
+
+export 'package:court_finder/modules/user/widgets/icon_text.dart';
+
 export 'package:court_finder/modules/user/widgets/slot_pitch.dart';
 
 export 'package:court_finder/modules/user/widgets/bell_notification.dart';
