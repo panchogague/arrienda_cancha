@@ -1,7 +1,7 @@
-import 'package:court_finder/modules/user/providers/ui_provider.dart';
-import 'package:court_finder/modules/user/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:court_finder/modules/user/providers/ui_provider.dart';
+import 'package:court_finder/modules/user/widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       key: key,
-      drawer: const Drawer(),
+      drawer: const CustomDrawer(),
       body: Stack(
         children: [
           const BackgroundCurve(),

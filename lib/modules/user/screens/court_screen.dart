@@ -153,7 +153,7 @@ class _DraggableDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-        initialChildSize: 0.66,
+        initialChildSize: 0.75,
         maxChildSize: 0.80,
         minChildSize: 0.66,
         builder: (context, scrollController) {

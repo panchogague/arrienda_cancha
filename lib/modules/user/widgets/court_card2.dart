@@ -1,3 +1,4 @@
+import 'package:court_finder/modules/user/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:court_finder/modules/user/models/models.dart';
@@ -35,13 +36,7 @@ class CourtCard2 extends StatelessWidget {
                 price: court.price,
               ),
               const Spacer(),
-              if (isNormalScreen)
-                IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      FontAwesomeIcons.heart,
-                      color: Colors.grey,
-                    )),
+              if (isNormalScreen) const LikeButton(),
             ]),
           ),
         ),
@@ -74,11 +69,20 @@ class _Content extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Text(
-            location,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.subtitle1,
+          Row(
+            children: [
+              const Icon(
+                Icons.location_on_outlined,
+                color: Colors.blueGrey,
+                size: 14,
+              ),
+              Text(
+                location,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
+            ],
           ),
           Text(title,
               maxLines: 2,
@@ -86,13 +90,19 @@ class _Content extends StatelessWidget {
               softWrap: false,
               style: Theme.of(context).textTheme.headline2),
           const _Facilities(),
-          Text(price, style: Theme.of(context).textTheme.bodyText1)
+          Row(
+            children: [
+              Text('Desde ', style: Theme.of(context).textTheme.bodyText1),
+              Text(price, style: Theme.of(context).textTheme.bodyText1),
+            ],
+          )
         ],
       ),
     );
   }
 }
 
+//TODO:renombrar esto
 class _Facilities extends StatelessWidget {
   const _Facilities({
     Key? key,

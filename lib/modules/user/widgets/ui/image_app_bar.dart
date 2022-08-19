@@ -1,3 +1,4 @@
+import 'package:court_finder/modules/user/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:court_finder/modules/user/widgets/rating.dart';
@@ -66,13 +67,7 @@ class ImageAppBar extends StatelessWidget {
                         border: Border.all(width: 2, color: Colors.white70),
                         shape: BoxShape.circle,
                         color: Colors.black26),
-                    child: IconButton(
-                        onPressed: () => Navigator.pop(context),
-                        icon: const Icon(
-                          FontAwesomeIcons.heart,
-                          size: 20,
-                          color: Colors.white70,
-                        )),
+                    child: const LikeButton(color: Colors.white70),
                   )
                 ],
               ),
