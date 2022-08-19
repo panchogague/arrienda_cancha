@@ -67,7 +67,7 @@ class CourtModel {
           description:
               'Ad ullamco non veniam pariatur incididunt magna proident. Et laboris adipisicing aliqua ut excepteur magna mollit enim quis mollit adipisicing nisi voluptate. Est consectetur est velit ullamco ut minim dolor ex culpa. Id ad veniam fugiat Lorem elit anim minim sunt fugiat velit culpa voluptate. Do sunt esse sint aliquip irure elit est id voluptate cillum nostrud exercitation enim. Laborum amet reprehenderit sit aute ipsum aute occaecat ad ad pariatur.',
           cancellationPolicy:
-              'Laborum adipisicing eiusmod Lorem incididunt sit enim qui magna ad laborum cupidatat Lorem dolore. Enim mollit consequat dolor aliquip cupidatat quis quis ipsum amet est. Aliqua reprehenderit exercitation est eiusmod esse. Culpa magna quis occaecat amet. Ea tempor dolore ex minim ea esse do qui sint aliqua id nulla. Nostrud ea et est irure exercitation esse excepteur. Aliquip dolore et est ut ut laboris aute duis est.',
+              'This court is avaialble for free cancellation up until 24 hours before your booking',
           howToAccess:
               'Qui enim consectetur sit nostrud eu amet cupidatat proident et ipsum. Velit sunt nisi laboris commodo nulla officia ut irure. Sint labore aliquip voluptate cillum ullamco esse. Non ex sunt commodo exercitation consectetur aute enim ipsum qui culpa esse laboris minim. Cupidatat labore magna dolor magna.',
           slotTimePerDate: mapDate),
@@ -82,7 +82,7 @@ class CourtModel {
           description:
               'Est laboris cupidatat sit consectetur fugiat deserunt. Deserunt Lorem eu pariatur cillum ut elit commodo nulla. Eu minim elit ut commodo in aliqua ea anim occaecat. Laboris reprehenderit nostrud sit proident irure excepteur eu incididunt aliqua. Esse reprehenderit laborum cupidatat sint consequat. Ad reprehenderit dolor fugiat anim sint sunt nostrud laboris enim. Qui sunt exercitation irure et et ut id esse elit aliquip sunt.',
           cancellationPolicy:
-              'Laborum adipisicing eiusmod Lorem incididunt sit enim qui magna ad laborum cupidatat Lorem dolore. Enim mollit consequat dolor aliquip cupidatat quis quis ipsum amet est. Aliqua reprehenderit exercitation est eiusmod esse. Culpa magna quis occaecat amet. Ea tempor dolore ex minim ea esse do qui sint aliqua id nulla. Nostrud ea et est irure exercitation esse excepteur. Aliquip dolore et est ut ut laboris aute duis est.',
+              'This court is avaialble for free cancellation up until 24 hours before your booking',
           howToAccess:
               'Qui enim consectetur sit nostrud eu amet cupidatat proident et ipsum. Velit sunt nisi laboris commodo nulla officia ut irure. Sint labore aliquip voluptate cillum ullamco esse. Non ex sunt commodo exercitation consectetur aute enim ipsum qui culpa esse laboris minim. Cupidatat labore magna dolor magna.',
           slotTimePerDate: mapDate),
@@ -97,7 +97,7 @@ class CourtModel {
           description:
               'Consectetur est veniam consectetur laboris aliquip proident non. Deserunt tempor sunt officia sit non non minim duis est nulla sunt. Ut tempor ullamco magna sit deserunt exercitation reprehenderit reprehenderit non pariatur occaecat. Anim reprehenderit cupidatat velit incididunt exercitation Lorem in ad non proident officia incididunt. Dolore irure reprehenderit minim quis deserunt aliquip eu. Reprehenderit officia nulla id eu cillum id qui in voluptate mollit sit anim aliquip.',
           cancellationPolicy:
-              'Laborum adipisicing eiusmod Lorem incididunt sit enim qui magna ad laborum cupidatat Lorem dolore. Enim mollit consequat dolor aliquip cupidatat quis quis ipsum amet est. Aliqua reprehenderit exercitation est eiusmod esse. Culpa magna quis occaecat amet. Ea tempor dolore ex minim ea esse do qui sint aliqua id nulla. Nostrud ea et est irure exercitation esse excepteur. Aliquip dolore et est ut ut laboris aute duis est.',
+              'This court is avaialble for free cancellation up until 24 hours before your booking',
           howToAccess:
               'Qui enim consectetur sit nostrud eu amet cupidatat proident et ipsum. Velit sunt nisi laboris commodo nulla officia ut irure. Sint labore aliquip voluptate cillum ullamco esse. Non ex sunt commodo exercitation consectetur aute enim ipsum qui culpa esse laboris minim. Cupidatat labore magna dolor magna.',
           slotTimePerDate: mapDate)

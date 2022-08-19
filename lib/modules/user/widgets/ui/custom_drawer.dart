@@ -45,7 +45,7 @@ class CustomDrawer extends StatelessWidget {
                     leading:
                         const Icon(FontAwesomeIcons.futbol, color: iconColor),
                     title: Text(
-                      'Historial',
+                      'Mis Reservas',
                       style: style,
                     ),
                     onTap: () {},

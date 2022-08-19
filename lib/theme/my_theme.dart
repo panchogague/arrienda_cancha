@@ -29,4 +29,8 @@ final myTheme = ThemeData.light().copyWith(
       selectedIconTheme: IconThemeData(size: 20),
       selectedItemColor: primary,
       showUnselectedLabels: false,
-    ));
+    ),
+    snackBarTheme: const SnackBarThemeData(
+        backgroundColor: primary,
+        contentTextStyle: TextStyle(
+            color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold)));

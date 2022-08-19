@@ -22,7 +22,7 @@ class CustomAppBar extends StatelessWidget {
                 onPressed: () {
                   final key = Provider.of<UIProvider>(context, listen: false)
                       .scaffoldKey;
-                  key.currentState!.openDrawer();
+                  key!.currentState!.openDrawer();
                 },
                 icon: const Icon(FontAwesomeIcons.bars)),
             Column(mainAxisAlignment: MainAxisAlignment.center, children: [

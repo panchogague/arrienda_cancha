@@ -8,7 +8,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final key = Provider.of<UIProvider>(context).scaffoldKey;
+    final key = GlobalKey<ScaffoldState>();
+    Provider.of<UIProvider>(context).scaffoldKey = key;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,

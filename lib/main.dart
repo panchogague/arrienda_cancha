@@ -35,6 +35,7 @@ class MyApp extends StatelessWidget {
           'home': (_) => const HomeScreen(),
           'search': (_) => const SearchScreen(),
           'court': (_) => const CourtScreen(),
+          'confirm_booking': (_) => const ConfirmationBookingScreen(),
         },
       ),
     );

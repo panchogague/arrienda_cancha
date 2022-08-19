@@ -34,21 +34,22 @@ class CourtScreen extends StatelessWidget {
           _DraggableDetail(court)
         ],
       ),
-      bottomNavigationBar: const _Booking(),
+      bottomNavigationBar: _Booking(court),
     );
   }
 
   void cleanProviders(BuildContext context) {
-    Provider.of<PickerSlotProvider>(context).cleanProperties();
-    Provider.of<BookingProvider>(context).cleanProverties();
+    Provider.of<PickerSlotProvider>(context, listen: false).cleanProperties();
+    Provider.of<BookingProvider>(context, listen: false).cleanProverties();
   }
 }
 
 class _Booking extends StatelessWidget {
-  const _Booking({
+  const _Booking(
+    this.court, {
     Key? key,
   }) : super(key: key);
-
+  final CourtModel court;
   @override
   Widget build(BuildContext context) {
     final bookingProvider = Provider.of<BookingProvider>(context);
@@ -109,7 +110,17 @@ class _Booking extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               OutlinedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  final booking = BookingModel(
+                                      court: court,
+                                      selectedDate:
+                                          bookingProvider.selectedDate,
+                                      slot: bookingProvider.slot,
+                                      pitch: bookingProvider.pitch);
+                                  Navigator.pushNamed(
+                                      context, 'confirm_booking',
+                                      arguments: booking);
+                                },
                                 child: const Padding(
                                   padding: EdgeInsets.all(5),
                                   child: Text(
