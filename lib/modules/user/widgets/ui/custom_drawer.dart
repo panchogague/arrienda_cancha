@@ -1,3 +1,4 @@
+import 'package:court_finder/modules/auth/services/auth_services.dart';
 import 'package:court_finder/modules/user/providers/providers.dart';
 import 'package:court_finder/modules/user/widgets/widgets.dart';
 import 'package:flutter/cupertino.dart';
@@ -85,7 +86,10 @@ class CustomDrawer extends StatelessWidget {
                   'Logout',
                   style: style,
                 ),
-                onTap: () {},
+                onTap: () {
+                  Provider.of<AuthService>(context, listen: false).logout();
+                  Navigator.pushReplacementNamed(context, 'login');
+                },
               ),
               const SizedBox(
                 height: 15,
