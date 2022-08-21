@@ -1,7 +1,6 @@
-import 'package:court_finder/modules/user/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:court_finder/modules/user/widgets/rating.dart';
+import 'package:court_finder/modules/user/widgets/widgets.dart';
 
 class ImageAppBar extends StatelessWidget {
   const ImageAppBar(
@@ -57,6 +56,7 @@ class ImageAppBar extends StatelessWidget {
                         radius: 10,
                         color: Colors.black26,
                         textColor: Colors.white,
+                        navigateToComments: true,
                       ),
                     ),
                   Container(

@@ -1,13 +1,16 @@
+import 'package:court_finder/modules/user/providers/providers.dart';
 import 'package:court_finder/modules/user/widgets/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final uiProvider = Provider.of<UIProvider>(context);
     final size = MediaQuery.of(context).size;
     const iconColor = Colors.blueGrey;
     TextStyle? style = Theme.of(context).textTheme.headline2;
@@ -48,7 +51,7 @@ class CustomDrawer extends StatelessWidget {
                       'Mis Reservas',
                       style: style,
                     ),
-                    onTap: () {},
+                    onTap: () => uiProvider.currentIndexPage = 1,
                   ),
                   const Divider(),
                   ListTile(
@@ -58,7 +61,7 @@ class CustomDrawer extends StatelessWidget {
                       'Favoritos',
                       style: style,
                     ),
-                    onTap: () {},
+                    onTap: () => uiProvider.currentIndexPage = 2,
                   ),
                   const Divider(),
                   ListTile(

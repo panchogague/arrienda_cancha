@@ -111,34 +111,31 @@ class _Facilities extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final facilities = [
-      Icon(
-        Icons.layers_outlined,
-        color: Theme.of(context).primaryColor,
-        size: 20,
-      ),
-      Text('Pasto Sintético',
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          style: Theme.of(context).textTheme.subtitle2),
-      const SizedBox(
-        width: 5,
-      ),
-      Icon(
-        Icons.sunny,
-        color: Theme.of(context).primaryColor,
-        size: 20,
-      ),
-      Text('Outdoor',
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          style: Theme.of(context).textTheme.subtitle2)
+      IconText(
+          text: 'Pasto Sintético',
+          style: Theme.of(context).textTheme.subtitle2,
+          icon: Icon(
+            Icons.layers_outlined,
+            color: Theme.of(context).primaryColor,
+            size: 20,
+          )),
+      IconText(
+          text: 'Outdoor',
+          style: Theme.of(context).textTheme.subtitle2,
+          icon: Icon(
+            Icons.sunny,
+            color: Theme.of(context).primaryColor,
+            size: 20,
+          ))
     ];
 
     final size = MediaQuery.of(context).size;
     bool isNormalScreen = size.height > 740.0;
 
     return isNormalScreen
-        ? Row(children: facilities)
+        ? Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: facilities)
         : Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             ...facilities,
             const SizedBox(

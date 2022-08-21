@@ -230,13 +230,13 @@ class _Content extends StatelessWidget {
                     const SizedBox(height: 20),
                     const DatePickerHorizontal(),
                     const SizedBox(height: 15),
+                    Text('Selecciona cancha',
+                        style: Theme.of(context).textTheme.headline5),
+                    const _PitchPicker(),
+                    const SizedBox(height: 15),
                     Text('Selecciona slot',
                         style: Theme.of(context).textTheme.headline5),
                     const _SlotPicker(),
-                    const SizedBox(height: 15),
-                    Text('Selecciona cancha',
-                        style: Theme.of(context).textTheme.headline5),
-                    const _PitchPicker()
                   ]),
             ),
             const SizedBox(height: 12),
@@ -259,46 +259,43 @@ class _Information extends StatelessWidget {
     return Container(
       width: double.infinity,
       color: const Color(0xffF0EEEF),
-      child: Padding(
-        padding: const EdgeInsets.all(15),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          _MapInfo(court!.location),
-          const _FacilitiesInfo(),
-          _TextInfo(
-            title: IconText(
-                text: 'Descripción',
-                icon: Icon(
-                  Icons.description_outlined,
-                  color: Theme.of(context).primaryColor,
-                  size: 18,
-                ),
-                style: Theme.of(context).textTheme.headline5),
-            paragraph: court.description,
-          ),
-          _TextInfo(
-            title: IconText(
-                text: 'Cómo acceder al recinto',
-                icon: Icon(
-                  FontAwesomeIcons.key,
-                  color: Theme.of(context).primaryColor,
-                  size: 18,
-                ),
-                style: Theme.of(context).textTheme.headline5),
-            paragraph: court.howToAccess,
-          ),
-          _TextInfo(
-            title: IconText(
-                text: 'Cancelación',
-                icon: Icon(
-                  Icons.cancel_outlined,
-                  color: Theme.of(context).primaryColor,
-                  size: 18,
-                ),
-                style: Theme.of(context).textTheme.headline5),
-            paragraph: court.cancellationPolicy,
-          ),
-        ]),
-      ),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        _MapInfo(court!.location),
+        const _FacilitiesInfo(),
+        _TextInfo(
+          title: IconText(
+              text: 'Descripción',
+              icon: Icon(
+                Icons.description_outlined,
+                color: Theme.of(context).primaryColor,
+                size: 18,
+              ),
+              style: Theme.of(context).textTheme.headline5),
+          paragraph: court.description,
+        ),
+        _TextInfo(
+          title: IconText(
+              text: 'Cómo acceder al recinto',
+              icon: Icon(
+                FontAwesomeIcons.key,
+                color: Theme.of(context).primaryColor,
+                size: 18,
+              ),
+              style: Theme.of(context).textTheme.headline5),
+          paragraph: court.howToAccess,
+        ),
+        _TextInfo(
+          title: IconText(
+              text: 'Cancelación',
+              icon: Icon(
+                Icons.cancel_outlined,
+                color: Theme.of(context).primaryColor,
+                size: 18,
+              ),
+              style: Theme.of(context).textTheme.headline5),
+          paragraph: court.cancellationPolicy,
+        ),
+      ]),
     );
   }
 }
@@ -358,7 +355,7 @@ class _FacilitiesInfo extends StatelessWidget {
               icon: Icon(
                 FontAwesomeIcons.futbol,
                 color: Theme.of(context).primaryColor,
-                size: 18,
+                size: 16,
               ),
               style: Theme.of(context).textTheme.headline5),
           const SizedBox(height: 10),
