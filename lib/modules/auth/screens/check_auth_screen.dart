@@ -1,3 +1,4 @@
+import 'package:court_finder/modules/admin/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:court_finder/modules/auth/screens/screens.dart';
@@ -32,7 +33,10 @@ class CheckAuthScreen extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     PageRouteBuilder(
-                        pageBuilder: (_, __, ___) => const HomeScreen(),
+                        pageBuilder: (_, __, ___) =>
+                            authService.userLogin!.isAdmin
+                                ? const DashboardScreen()
+                                : const HomeScreen(),
                         transitionDuration: const Duration(seconds: 0)));
               });
             }

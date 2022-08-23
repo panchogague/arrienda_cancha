@@ -2,6 +2,7 @@ import 'package:court_finder/modules/auth/providers/login_form_provider.dart';
 import 'package:court_finder/modules/auth/services/services.dart';
 import 'package:court_finder/modules/auth/ui/input_decorations.dart';
 import 'package:court_finder/modules/auth/widgets/widgets.dart';
+import 'package:court_finder/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -122,7 +123,7 @@ class _LoginForm extends StatelessWidget {
                       if (errorMessage == null) {
                         navigator.pushReplacementNamed('home');
                       } else {
-                        //TODO:show error message
+                        NotificationService.showSnackbar(errorMessage);
                         loginForm.isLoading = false;
                       }
                     },

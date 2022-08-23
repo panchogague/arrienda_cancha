@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:court_finder/modules/user/models/models.dart';
+import 'package:court_finder/models/models.dart';
 import 'package:court_finder/modules/user/widgets/widgets.dart';
 
 class PopularCourts extends StatelessWidget {

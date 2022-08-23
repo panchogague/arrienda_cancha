@@ -1,6 +1,9 @@
+import 'package:court_finder/modules/admin/screens/screens.dart';
 import 'package:court_finder/modules/auth/services/services.dart';
+import 'package:court_finder/services/services.dart';
 import 'package:flutter/material.dart';
-import 'package:global_configuration/global_configuration.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'package:court_finder/theme/my_theme.dart';
 import 'package:court_finder/modules/user/providers/providers.dart';
@@ -9,7 +12,10 @@ import 'package:court_finder/modules/auth/screens/screens.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await GlobalConfiguration().loadFromAsset('app_settings');
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const MyApp());
 }
 
@@ -32,13 +38,15 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => BookingProvider(),
         ),
-        ChangeNotifierProvider(create: (_) => AuthService())
+        ChangeNotifierProvider(create: (_) => AuthService()),
+        ChangeNotifierProvider(create: (_) => CategoryService()),
       ],
       child: MaterialApp(
         title: 'Court Finder App',
         debugShowCheckedModeBanner: false,
         theme: myTheme,
         initialRoute: 'checking',
+        scaffoldMessengerKey: NotificationService.messengerKey,
         routes: {
           'home': (_) => const HomeScreen(),
           'search': (_) => const SearchScreen(),
@@ -50,6 +58,9 @@ class MyApp extends StatelessWidget {
           'login': (_) => const LoginScreen(),
           'register': (_) => const RegisterScreen(),
           'checking': (_) => const CheckAuthScreen(),
+
+          //Admin
+          'dashboard': (_) => const DashboardScreen(),
         },
       ),
     );

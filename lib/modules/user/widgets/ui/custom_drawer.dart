@@ -12,6 +12,7 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final uiProvider = Provider.of<UIProvider>(context);
+
     final size = MediaQuery.of(context).size;
     const iconColor = Colors.blueGrey;
     TextStyle? style = Theme.of(context).textTheme.headline2;
@@ -107,6 +108,7 @@ class _DrawerHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
     return Container(
       margin: const EdgeInsets.only(top: 15),
       padding: const EdgeInsets.all(15),
@@ -125,18 +127,18 @@ class _DrawerHeader extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children: [
               Text(
-                'User Name',
-                style: TextStyle(
+                authService.userLogin!.firstName,
+                style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 25),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Text(
-                'email@gmail.com',
-                style: TextStyle(
+                authService.userLogin!.email,
+                style: const TextStyle(
                     color: Colors.white54,
                     fontWeight: FontWeight.w500,
                     fontSize: 20),

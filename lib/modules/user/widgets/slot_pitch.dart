@@ -1,7 +1,7 @@
-import 'package:court_finder/modules/user/models/models.dart';
-import 'package:court_finder/modules/user/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:court_finder/models/models.dart';
+import 'package:court_finder/modules/user/providers/providers.dart';
 
 class SlotPitch extends StatelessWidget {
   const SlotPitch(

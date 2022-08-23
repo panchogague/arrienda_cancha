@@ -1,6 +1,6 @@
-import 'package:court_finder/modules/user/models/models.dart';
-import 'package:court_finder/modules/user/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:court_finder/models/models.dart';
+import 'package:court_finder/modules/user/widgets/widgets.dart';
 
 class CourtCard extends StatelessWidget {
   const CourtCard(this.court, {Key? key}) : super(key: key);

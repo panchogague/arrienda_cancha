@@ -3,6 +3,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:maps_launcher/maps_launcher.dart';
+import 'package:court_finder/models/models.dart';
 import 'package:court_finder/modules/user/providers/providers.dart';
 import 'package:court_finder/modules/user/widgets/widgets.dart';
 import 'package:court_finder/modules/user/models/models.dart';

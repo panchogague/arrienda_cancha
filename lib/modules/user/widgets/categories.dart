@@ -1,6 +1,8 @@
+import 'package:court_finder/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:court_finder/modules/user/models/models.dart';
+import 'package:court_finder/models/models.dart';
+import 'package:provider/provider.dart';
 
 class Categories extends StatelessWidget {
   const Categories({Key? key}) : super(key: key);
@@ -8,11 +10,17 @@ class Categories extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final categories = CategoryModel.getAllCategories();
+    final categoryService = Provider.of<CategoryService>(context);
+    final categories = categoryService.categories;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const _Title(),
+        if (categoryService.isLoading)
+          Center(
+            child: CircularProgressIndicator(
+                color: Theme.of(context).primaryColor),
+          ),
         Container(
           padding: const EdgeInsets.all(10),
           width: double.infinity,
@@ -86,7 +94,10 @@ class _CategoryCard extends StatelessWidget {
                   gradient: LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
-                      colors: [category.primaryColor, category.secondaryColor]),
+                      colors: [
+                        Theme.of(context).primaryColor,
+                        Theme.of(context).primaryColor
+                      ]),
                   boxShadow: [
                     BoxShadow(
                         color: Colors.grey.withOpacity(0.9),

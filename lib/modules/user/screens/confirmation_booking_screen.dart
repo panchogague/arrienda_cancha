@@ -1,5 +1,6 @@
 import 'package:court_finder/modules/user/models/models.dart';
 import 'package:court_finder/modules/user/providers/providers.dart';
+import 'package:court_finder/services/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -50,9 +51,9 @@ class ConfirmationBookingScreen extends StatelessWidget {
                     child: OutlinedButton(
                         onPressed: () {
                           //TODO:grabar reserva
-                          const snackBar = SnackBar(
-                            content: Text('Reserva realizada con éxito'),
-                          );
+
+                          NotificationService.showSnackbar(
+                              'Reserva realizada con éxito');
 
                           Navigator.pushReplacementNamed(context, 'home');
                           Provider.of<BookingProvider>(context, listen: false)
@@ -60,7 +61,6 @@ class ConfirmationBookingScreen extends StatelessWidget {
                           Provider.of<PickerSlotProvider>(context,
                                   listen: false)
                               .cleanProperties();
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         },
                         style: ButtonStyle(
                             shape: MaterialStateProperty.all<OutlinedBorder>(

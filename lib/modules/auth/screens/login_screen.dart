@@ -2,6 +2,7 @@ import 'package:court_finder/modules/auth/providers/login_form_provider.dart';
 import 'package:court_finder/modules/auth/services/services.dart';
 import 'package:court_finder/modules/auth/ui/input_decorations.dart';
 import 'package:court_finder/modules/auth/widgets/widgets.dart';
+import 'package:court_finder/services/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -121,10 +122,11 @@ class _LoginForm extends StatelessWidget {
                           loginForm.email, loginForm.password);
 
                       if (errorMessage == null) {
-                        navigator.pushReplacementNamed('home');
+                        authService.userLogin!.isAdmin
+                            ? navigator.pushReplacementNamed('dashboard')
+                            : navigator.pushReplacementNamed('home');
                       } else {
-                        //TODO:show error
-                        //NotificationService.showSnackbar(errorMessage);
+                        NotificationService.showSnackbar(errorMessage);
                         loginForm.isLoading = false;
                       }
                     },
