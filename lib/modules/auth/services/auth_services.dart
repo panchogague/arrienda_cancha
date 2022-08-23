@@ -47,6 +47,15 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<String?> login(String email, String password) async {
+    //TODO: Mock login remover esto
+    userLogin = UserModel(
+        email: 'test@test.com',
+        firstName: 'test',
+        lastName: 'lasttest',
+        userId: 'WnKjzpSNtAeaXmcNJ56YHVmL6S12',
+        isAdmin: false);
+    return '';
+
     try {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
           email: email, password: password);
@@ -68,6 +77,14 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<String> readToken() async {
+    userLogin = UserModel(
+        email: 'test@test.com',
+        firstName: 'test',
+        lastName: 'lasttest',
+        userId: 'WnKjzpSNtAeaXmcNJ56YHVmL6S12',
+        isAdmin: false);
+    return 'asasdasd';
+
     if (auth.currentUser != null) {
       var token = await auth.currentUser!.getIdTokenResult(true);
       await loadUserData(auth.currentUser!.uid);
