@@ -7,7 +7,7 @@ class SlotTime extends StatelessWidget {
   const SlotTime(
       {Key? key,
       required this.slotHours,
-      this.selectedColor = const Color(0xffF34F57),
+      this.selectedColor = const Color(0xff2A9D8F),
       required this.index})
       : super(key: key);
 

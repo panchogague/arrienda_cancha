@@ -27,7 +27,7 @@ class CourtCard extends StatelessWidget {
               _Image(
                 urlImg: court.imgUrl,
                 rating: court.rating,
-                tagId: court.id,
+                tagId: court.id!,
               ),
               const SizedBox(
                 height: 5,

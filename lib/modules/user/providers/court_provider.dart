@@ -20,8 +20,8 @@ class CourtProvider extends ChangeNotifier {
     var formatter = DateFormat('yyyy-MM-dd');
     String key = formatter.format(_dateSelected);
 
-    if (_courtSelected!.slotTimePerDate.containsKey(key)) {
-      return _courtSelected!.slotTimePerDate[key]!;
+    if (_courtSelected!.slotTimePerDate!.containsKey(key)) {
+      return _courtSelected!.slotTimePerDate![key]!;
     } else {
       return [];
     }

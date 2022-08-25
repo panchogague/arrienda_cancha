@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-const primary = Color(0xffF34F57);
+const primary = Color(0xff2A9D8F);
+//264653
 
 final myTheme = ThemeData.light().copyWith(
     primaryColor: primary,
@@ -30,7 +31,13 @@ final myTheme = ThemeData.light().copyWith(
       selectedItemColor: primary,
       showUnselectedLabels: false,
     ),
+    appBarTheme: const AppBarTheme(color: primary),
+    floatingActionButtonTheme:
+        const FloatingActionButtonThemeData(backgroundColor: primary),
     snackBarTheme: const SnackBarThemeData(
         backgroundColor: primary,
         contentTextStyle: TextStyle(
-            color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold)));
+            color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold)),
+    checkboxTheme: CheckboxThemeData(
+      fillColor: MaterialStateProperty.all(primary),
+    ));

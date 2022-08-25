@@ -7,7 +7,7 @@ class SlotPitch extends StatelessWidget {
   const SlotPitch(
       {Key? key,
       required this.pitch,
-      this.selectedColor = const Color(0xffF34F57),
+      this.selectedColor = const Color(0xff2A9D8F),
       this.isAvailable = true,
       required this.index})
       : super(key: key);

@@ -1,28 +1,25 @@
-import 'package:court_finder/modules/auth/services/auth_services.dart';
-import 'package:court_finder/modules/user/providers/providers.dart';
+import 'package:court_finder/modules/auth/services/services.dart';
 import 'package:court_finder/widgets/widgets.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
-class CustomDrawer extends StatelessWidget {
-  const CustomDrawer({Key? key}) : super(key: key);
+class AdminMenu extends StatelessWidget {
+  const AdminMenu({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final uiProvider = Provider.of<UIProvider>(context);
-
     final size = MediaQuery.of(context).size;
     const iconColor = Colors.blueGrey;
-    TextStyle? style = Theme.of(context).textTheme.headline2;
-    return Drawer(
-      backgroundColor: Colors.white,
-      child: Stack(
-        children: [
+    TextStyle? style = Theme.of(context).textTheme.bodyText1;
+
+    return Container(
+        color: Colors.white,
+        width: size.width * 0.20,
+        child: Stack(children: [
           SizedBox(
-            height: double.infinity,
             width: double.infinity,
+            height: double.infinity,
             child: CustomPaint(
               painter: HeaderDiagonalPainter(),
             ),
@@ -30,40 +27,55 @@ class CustomDrawer extends StatelessWidget {
           Column(
             children: [
               SizedBox(
-                height: size.height * 0.9,
+                height: size.height * 0.8,
                 child: ListView(padding: EdgeInsets.zero, children: [
                   const CustomDrawerHeader(),
-                  SizedBox(height: size.height * 0.06),
+                  SizedBox(height: size.height * 0.10),
                   ListTile(
                     leading: const Icon(
-                      Icons.person,
+                      FontAwesomeIcons.house,
                       color: iconColor,
                     ),
                     title: Text(
-                      'Mi Perfil',
+                      'Home',
                       style: style,
                     ),
-                    onTap: () {},
+                    onTap: () =>
+                        Navigator.pushReplacementNamed(context, 'dashboard'),
+                  ),
+                  const Divider(),
+                  ListTile(
+                    leading: const Icon(
+                      FontAwesomeIcons.addressCard,
+                      color: iconColor,
+                    ),
+                    title: Text(
+                      'Perfil Recinto',
+                      style: style,
+                    ),
+                    onTap: () => Navigator.pushReplacementNamed(
+                        context, 'court_profile'),
+                  ),
+                  const Divider(),
+                  ListTile(
+                    leading: const Icon(Icons.layers, color: iconColor),
+                    title: Text(
+                      'Mis Canchas',
+                      style: style,
+                    ),
+                    onTap: () =>
+                        Navigator.pushReplacementNamed(context, 'my_pitches'),
                   ),
                   const Divider(),
                   ListTile(
                     leading:
-                        const Icon(FontAwesomeIcons.futbol, color: iconColor),
+                        const Icon(FontAwesomeIcons.folder, color: iconColor),
                     title: Text(
-                      'Mis Reservas',
+                      'Historial Reservas',
                       style: style,
                     ),
-                    onTap: () => uiProvider.currentIndexPage = 1,
-                  ),
-                  const Divider(),
-                  ListTile(
-                    leading:
-                        const Icon(CupertinoIcons.heart_fill, color: iconColor),
-                    title: Text(
-                      'Favoritos',
-                      style: style,
-                    ),
-                    onTap: () => uiProvider.currentIndexPage = 2,
+                    onTap: () =>
+                        Navigator.pushReplacementNamed(context, 'historial'),
                   ),
                   const Divider(),
                   ListTile(
@@ -97,8 +109,6 @@ class CustomDrawer extends StatelessWidget {
               )
             ],
           ),
-        ],
-      ),
-    );
+        ]));
   }
 }

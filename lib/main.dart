@@ -3,6 +3,7 @@ import 'package:court_finder/modules/auth/services/services.dart';
 import 'package:court_finder/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'package:court_finder/theme/my_theme.dart';
@@ -26,22 +27,23 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => UIProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => PickerSlotProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => CourtProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => BookingProvider(),
-        ),
+        ChangeNotifierProvider(create: (_) => UIProvider()),
+        ChangeNotifierProvider(create: (_) => PickerSlotProvider()),
+        ChangeNotifierProvider(create: (_) => CourtProvider()),
+        ChangeNotifierProvider(create: (_) => BookingProvider()),
         ChangeNotifierProvider(create: (_) => AuthService()),
         ChangeNotifierProvider(create: (_) => CategoryService()),
+        ChangeNotifierProvider(create: (_) => CourtService()),
       ],
       child: MaterialApp(
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('es', ''), // Spanish, no country code
+        ],
         title: 'Court Finder App',
         debugShowCheckedModeBanner: false,
         theme: myTheme,
@@ -61,6 +63,9 @@ class MyApp extends StatelessWidget {
 
           //Admin
           'dashboard': (_) => const DashboardScreen(),
+          'my_pitches': (_) => const MyPitchesScreen(),
+          'court_profile': (_) => const CourtProfileScreen(),
+          'historial': (_) => const BookingHistoryScreen(),
         },
       ),
     );

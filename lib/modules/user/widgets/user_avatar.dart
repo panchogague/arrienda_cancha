@@ -34,7 +34,7 @@ class UserAvatar extends StatelessWidget {
         borderRadius: BorderRadius.circular(40),
         child: FadeInImage(
           fit: BoxFit.fill,
-          image: NetworkImage(imgUrl),
+          image: NetworkImage(imgUrl, scale: 1),
           placeholder: const AssetImage('assets/loading.gif'),
         ),
       ),

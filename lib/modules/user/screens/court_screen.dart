@@ -29,7 +29,7 @@ class CourtScreen extends StatelessWidget {
         children: [
           ImageAppBar(
             imgUrl: court.imgUrl,
-            tag: court.id,
+            tag: court.id!,
             rating: court.rating,
           ),
           _DraggableDetail(court)
@@ -77,7 +77,7 @@ class _Booking extends StatelessWidget {
                     Container(
                       height: 45,
                       width: double.infinity,
-                      color: const Color(0xff281853),
+                      color: const Color(0xff264653),
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [

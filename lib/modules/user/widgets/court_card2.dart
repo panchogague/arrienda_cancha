@@ -23,7 +23,7 @@ class CourtCard2 extends StatelessWidget {
               _ImageAndRating(
                 imgUrl: court.imgUrl,
                 rate: court.rating,
-                tagId: court.id,
+                tagId: court.id!,
               ),
               const SizedBox(
                 width: 10,

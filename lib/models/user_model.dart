@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:court_finder/models/models.dart';
+
 class UserModel {
   UserModel({
     required this.firstName,
@@ -14,6 +16,7 @@ class UserModel {
   String lastName;
   String email;
   String? userId;
+  List<CourtModel> adminCourts = [];
 
   factory UserModel.fromJson(String str) => UserModel.fromMap(json.decode(str));
 

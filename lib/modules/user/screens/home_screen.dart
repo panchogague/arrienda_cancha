@@ -1,6 +1,6 @@
-import 'package:court_finder/modules/user/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:court_finder/modules/user/screens/screens.dart';
 import 'package:court_finder/modules/user/providers/ui_provider.dart';
 import 'package:court_finder/modules/user/widgets/widgets.dart';
 

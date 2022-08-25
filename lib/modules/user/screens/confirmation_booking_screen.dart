@@ -13,7 +13,7 @@ class ConfirmationBookingScreen extends StatelessWidget {
         ModalRoute.of(context)!.settings.arguments as BookingModel;
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: const Color(0xff281853), //const Color(0xffF0EEEF),
+      backgroundColor: const Color(0xff264653), //const Color(0xffF0EEEF),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,

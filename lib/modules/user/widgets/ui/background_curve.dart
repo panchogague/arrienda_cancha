@@ -22,7 +22,7 @@ class _CurvePainter extends CustomPainter {
     final paint = Paint();
 
     //Properties
-    paint.color = const Color(0xffF0EEEF);
+    paint.color = const Color(0xff83c5be);
     paint.style = PaintingStyle.fill;
     paint.strokeWidth = 5;
 

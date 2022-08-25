@@ -10,6 +10,28 @@ class AuthService extends ChangeNotifier {
 
   UserModel? userLogin;
 
+  AuthService() {
+    userLogin = UserModel(
+      email: 'test@test.com',
+      firstName: 'test',
+      lastName: 'lasttest',
+      userId: 'WnKjzpSNtAeaXmcNJ56YHVmL6S12',
+      isAdmin: true,
+    );
+    userLogin!.adminCourts.add(CourtModel(
+        name: 'Canchas guaton linares',
+        imgUrl: '',
+        location: 'Calle Aranda #235',
+        price: '',
+        description:
+            'Anim nostrud mollit laboris enim exercitation ex in excepteur sint exercitation voluptate nulla. Qui officia enim laborum cupidatat laboris Lorem nulla adipisicing. Non mollit velit consequat voluptate cillum est. Non sit esse sit voluptate sit nisi consectetur laborum pariatur elit velit laboris irure.',
+        howToAccess:
+            'Sint et laboris occaecat cillum commodo ut. Pariatur laborum ullamco ex sit deserunt quis reprehenderit dolore amet aliqua. Aliqua est deserunt eiusmod veniam elit. Dolor deserunt sunt veniam voluptate in velit laborum enim sunt.',
+        cancellationPolicy:
+            'Ad ea reprehenderit do velit in ut culpa labore ut irure elit eu.',
+        userId: 'WnKjzpSNtAeaXmcNJ56YHVmL6S12'));
+  }
+
   //final storage = const FlutterSecureStorage();
 
   Future<String?> createUser(String email, String password) async {
@@ -42,18 +64,25 @@ class AuthService extends ChangeNotifier {
 
   Future loadUserData(String userId) async {
     final userDB = await _db.collection('users').doc(userId).get();
-
     userLogin = UserModel.fromFireBase(userDB.data()!, userDB.id);
+
+    if (userLogin!.isAdmin) {
+      //TODO:cargar la info del recinto y las canchas
+      //TODO:mover la db a archivos
+      final courts = await _db
+          .collection('courts')
+          .where('userId', isEqualTo: userId)
+          .get();
+      //Por ahora vamos a trabajar 1 usuario 1 recinto, pero queda abierto para agregar mas recintos por usuario
+      for (var element in courts.docs) {
+        final data = element.data();
+        userLogin!.adminCourts.add(CourtModel.fromFireBase(data, element.id));
+      }
+    }
   }
 
   Future<String?> login(String email, String password) async {
     //TODO: Mock login remover esto
-    userLogin = UserModel(
-        email: 'test@test.com',
-        firstName: 'test',
-        lastName: 'lasttest',
-        userId: 'WnKjzpSNtAeaXmcNJ56YHVmL6S12',
-        isAdmin: false);
     return '';
 
     try {
@@ -77,12 +106,6 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<String> readToken() async {
-    userLogin = UserModel(
-        email: 'test@test.com',
-        firstName: 'test',
-        lastName: 'lasttest',
-        userId: 'WnKjzpSNtAeaXmcNJ56YHVmL6S12',
-        isAdmin: false);
     return 'asasdasd';
 
     if (auth.currentUser != null) {

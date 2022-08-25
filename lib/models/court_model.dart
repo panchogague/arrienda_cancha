@@ -2,7 +2,7 @@ import 'package:court_finder/models/models.dart';
 import 'package:intl/intl.dart';
 
 class CourtModel {
-  String id; //TODO:cambiar esto si migramos de firebase
+  String? id;
   String name;
   String imgUrl;
   String location;
@@ -11,22 +11,47 @@ class CourtModel {
   String description;
   String howToAccess;
   String cancellationPolicy;
+  String userId;
 
-  Map<String, List<SlotTimeModel>> slotTimePerDate;
+  Map<String, List<SlotTimeModel>>? slotTimePerDate;
+
+  Map<String, dynamic> toMap() => {
+        "name": name,
+        "description": description,
+        "howToAccess": howToAccess,
+        "cancellationPolicy": cancellationPolicy,
+        "location": location,
+        "userId": userId,
+      };
+
+  factory CourtModel.fromFireBase(Map<String, dynamic> json, String key) =>
+      CourtModel(
+          imgUrl: json["imgUrl"] ?? "",
+          name: json["name"],
+          id: key,
+          cancellationPolicy: json["cancellationPolicy"],
+          description: json["description"],
+          howToAccess: json["howToAccess"],
+          location: json["location"],
+          price: '',
+          userId: json["userId"]);
 
   //TODO: Pending
 
   CourtModel(
-      {required this.id,
+      {this.id,
       required this.name,
       required this.imgUrl,
       required this.location,
       required this.price,
-      required this.slotTimePerDate,
+      this.slotTimePerDate,
       required this.description,
       required this.howToAccess,
       required this.cancellationPolicy,
+      required this.userId,
       this.rating});
+
+//TODO:borrar todo esto
 
   static List<CourtModel> getPopulars() {
     var formatter = DateFormat('yyyy-MM-dd');
@@ -70,7 +95,8 @@ class CourtModel {
               'This court is avaialble for free cancellation up until 24 hours before your booking',
           howToAccess:
               'Qui enim consectetur sit nostrud eu amet cupidatat proident et ipsum. Velit sunt nisi laboris commodo nulla officia ut irure. Sint labore aliquip voluptate cillum ullamco esse. Non ex sunt commodo exercitation consectetur aute enim ipsum qui culpa esse laboris minim. Cupidatat labore magna dolor magna.',
-          slotTimePerDate: mapDate),
+          slotTimePerDate: mapDate,
+          userId: 'asd'),
       CourtModel(
           id: '2',
           name: 'Los Mormones.',
@@ -85,7 +111,8 @@ class CourtModel {
               'This court is avaialble for free cancellation up until 24 hours before your booking',
           howToAccess:
               'Qui enim consectetur sit nostrud eu amet cupidatat proident et ipsum. Velit sunt nisi laboris commodo nulla officia ut irure. Sint labore aliquip voluptate cillum ullamco esse. Non ex sunt commodo exercitation consectetur aute enim ipsum qui culpa esse laboris minim. Cupidatat labore magna dolor magna.',
-          slotTimePerDate: mapDate),
+          slotTimePerDate: mapDate,
+          userId: 'asd'),
       CourtModel(
           id: '3',
           name: 'Canchas Padel, Chino Rios.',
@@ -100,7 +127,8 @@ class CourtModel {
               'This court is avaialble for free cancellation up until 24 hours before your booking',
           howToAccess:
               'Qui enim consectetur sit nostrud eu amet cupidatat proident et ipsum. Velit sunt nisi laboris commodo nulla officia ut irure. Sint labore aliquip voluptate cillum ullamco esse. Non ex sunt commodo exercitation consectetur aute enim ipsum qui culpa esse laboris minim. Cupidatat labore magna dolor magna.',
-          slotTimePerDate: mapDate)
+          slotTimePerDate: mapDate,
+          userId: 'asd')
     ];
   }
 }
