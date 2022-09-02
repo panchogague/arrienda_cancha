@@ -1,12 +1,11 @@
+import 'package:court_finder/database/user_db.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 //import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:court_finder/models/models.dart';
 
 class AuthService extends ChangeNotifier {
   FirebaseAuth auth = FirebaseAuth.instance;
-  final _db = FirebaseFirestore.instance;
 
   UserModel? userLogin;
 
@@ -19,17 +18,17 @@ class AuthService extends ChangeNotifier {
       isAdmin: true,
     );
     userLogin!.adminCourts.add(CourtModel(
+        id: 'cRms8GVfTLOOKw5z5i7i',
         name: 'Canchas guaton linares',
         imgUrl: '',
         location: 'Calle Aranda #235',
         price: '',
         description:
             'Anim nostrud mollit laboris enim exercitation ex in excepteur sint exercitation voluptate nulla. Qui officia enim laborum cupidatat laboris Lorem nulla adipisicing. Non mollit velit consequat voluptate cillum est. Non sit esse sit voluptate sit nisi consectetur laborum pariatur elit velit laboris irure.',
-        howToAccess:
-            'Sint et laboris occaecat cillum commodo ut. Pariatur laborum ullamco ex sit deserunt quis reprehenderit dolore amet aliqua. Aliqua est deserunt eiusmod veniam elit. Dolor deserunt sunt veniam voluptate in velit laborum enim sunt.',
-        cancellationPolicy:
-            'Ad ea reprehenderit do velit in ut culpa labore ut irure elit eu.',
-        userId: 'WnKjzpSNtAeaXmcNJ56YHVmL6S12'));
+        howToAccess: 'Sint et laboris occaecat cillum commodo ut. Pariatur laborum ullamco ex sit deserunt quis reprehenderit dolore amet aliqua. Aliqua est deserunt eiusmod veniam elit. Dolor deserunt sunt veniam voluptate in velit laborum enim sunt.',
+        cancellationPolicy: 'Ad ea reprehenderit do velit in ut culpa labore ut irure elit eu.',
+        userId: 'WnKjzpSNtAeaXmcNJ56YHVmL6S12',
+        openDays: [2, 3, 4, 5, 6]));
   }
 
   //final storage = const FlutterSecureStorage();
@@ -38,7 +37,7 @@ class AuthService extends ChangeNotifier {
     try {
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      await createUserCollection(
+      await UserDB().createUserCollection(
           UserModel(
             firstName: 'Nombre',
             lastName: 'Apellido',
@@ -58,32 +57,13 @@ class AuthService extends ChangeNotifier {
     return null;
   }
 
-  Future createUserCollection(UserModel user, String userId) async {
-    await _db.collection('users').doc(userId).set(user.toMap());
-  }
-
   Future loadUserData(String userId) async {
-    final userDB = await _db.collection('users').doc(userId).get();
-    userLogin = UserModel.fromFireBase(userDB.data()!, userDB.id);
-
-    if (userLogin!.isAdmin) {
-      //TODO:cargar la info del recinto y las canchas
-      //TODO:mover la db a archivos
-      final courts = await _db
-          .collection('courts')
-          .where('userId', isEqualTo: userId)
-          .get();
-      //Por ahora vamos a trabajar 1 usuario 1 recinto, pero queda abierto para agregar mas recintos por usuario
-      for (var element in courts.docs) {
-        final data = element.data();
-        userLogin!.adminCourts.add(CourtModel.fromFireBase(data, element.id));
-      }
-    }
+    userLogin = await UserDB().loadUserData(userId);
   }
 
   Future<String?> login(String email, String password) async {
     //TODO: Mock login remover esto
-    return '';
+    // return '';
 
     try {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
@@ -106,7 +86,7 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<String> readToken() async {
-    return 'asasdasd';
+    //return 'asasdasd';
 
     if (auth.currentUser != null) {
       var token = await auth.currentUser!.getIdTokenResult(true);

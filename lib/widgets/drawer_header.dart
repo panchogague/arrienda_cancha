@@ -17,8 +17,8 @@ class CustomDrawerHeader extends StatelessWidget {
       child: Row(
         children: [
           const UserAvatar(
-            width: 65,
-            height: 65,
+            width: 60,
+            height: 60,
             showShadow: false,
             imgUrl:
                 'https://www.eaglesvine.com/wp-content/uploads/2021/06/Gabbie-Carter_05.jpg',
@@ -33,7 +33,7 @@ class CustomDrawerHeader extends StatelessWidget {
                 style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: 25),
+                    fontSize: 22),
               ),
               const SizedBox(height: 10),
               Text(
@@ -41,7 +41,7 @@ class CustomDrawerHeader extends StatelessWidget {
                 style: const TextStyle(
                     color: Colors.white54,
                     fontWeight: FontWeight.w500,
-                    fontSize: 20),
+                    fontSize: 15),
               ),
             ],
           )

@@ -1,4 +1,3 @@
-import 'package:court_finder/models/court_model.dart';
 import 'package:court_finder/modules/admin/providers/providers.dart';
 import 'package:court_finder/modules/admin/widgets/widgets.dart';
 import 'package:court_finder/modules/auth/services/services.dart';
@@ -42,18 +41,8 @@ class _SubmitButton extends StatelessWidget {
               final authService =
                   Provider.of<AuthService>(context, listen: false);
 
-              final courtService =
-                  Provider.of<CourtService>(context, listen: false);
-
-              final resp = await courtService.createOrUpdateCourt(CourtModel(
-                  name: courtForm.name,
-                  imgUrl: '',
-                  location: courtForm.location,
-                  price: '',
-                  description: courtForm.description,
-                  howToAccess: courtForm.howToAccess,
-                  cancellationPolicy: courtForm.cancellationPolicy,
-                  userId: authService.userLogin!.userId!));
+              final resp = await courtForm
+                  .createOrUpdateCourt(authService.userLogin!.userId!);
 
               if (resp != null) {
                 NotificationService.showSnackbar(resp);
@@ -79,7 +68,7 @@ class _CourtProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final courtForm = Provider.of<CourtProfileProvider>(context);
+    final courtForm = Provider.of<CourtProfileProvider>(context, listen: false);
     final auth = Provider.of<AuthService>(context, listen: false);
     if (auth.userLogin!.adminCourts.isNotEmpty) {
       courtForm.initialize(auth.userLogin!.adminCourts[0]);
@@ -88,6 +77,7 @@ class _CourtProfile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       child: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         physics: const BouncingScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,7 +104,6 @@ class _FormCourtProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final courtForm = Provider.of<CourtProfileProvider>(context);
-    final size = MediaQuery.of(context).size;
     return Form(
       key: courtForm.formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -125,16 +114,16 @@ class _FormCourtProfile extends StatelessWidget {
             children: [
               Flexible(
                   child: CustomInput(
-                initialValue: courtForm.name,
-                onChanged: (value) => courtForm.name = value,
+                initialValue: courtForm.court.name,
+                onChanged: (value) => courtForm.court.name = value,
                 hintText: 'Nombre del recinto',
                 icon: FontAwesomeIcons.addressCard,
               )),
               const SizedBox(width: 20),
               Flexible(
                 child: CustomInput(
-                  initialValue: courtForm.location,
-                  onChanged: (value) => courtForm.location = value,
+                  initialValue: courtForm.court.location,
+                  onChanged: (value) => courtForm.court.location = value,
                   hintText: 'Ubicación',
                   icon: Icons.location_on_outlined,
                 ),
@@ -146,8 +135,8 @@ class _FormCourtProfile extends StatelessWidget {
             children: [
               Flexible(
                 child: CustomInput(
-                  initialValue: courtForm.howToAccess,
-                  onChanged: (value) => courtForm.howToAccess = value,
+                  initialValue: courtForm.court.howToAccess,
+                  onChanged: (value) => courtForm.court.howToAccess = value,
                   keyboardType: TextInputType.multiline,
                   maxLine: 5,
                   hintText: 'Cómo llegar',
@@ -157,8 +146,9 @@ class _FormCourtProfile extends StatelessWidget {
               const SizedBox(width: 20),
               Flexible(
                 child: CustomInput(
-                  initialValue: courtForm.cancellationPolicy,
-                  onChanged: (value) => courtForm.cancellationPolicy = value,
+                  initialValue: courtForm.court.cancellationPolicy,
+                  onChanged: (value) =>
+                      courtForm.court.cancellationPolicy = value,
                   keyboardType: TextInputType.multiline,
                   maxLine: 5,
                   hintText: 'Política de cancelación',
@@ -169,8 +159,8 @@ class _FormCourtProfile extends StatelessWidget {
           ),
           const SizedBox(height: 30),
           CustomInput(
-            initialValue: courtForm.description,
-            onChanged: (value) => courtForm.description = value,
+            initialValue: courtForm.court.description,
+            onChanged: (value) => courtForm.court.description = value,
             keyboardType: TextInputType.multiline,
             maxLine: 5,
             hintText: 'Descripción del recinto',
@@ -211,9 +201,8 @@ class _OpenDays extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final courtForm = Provider.of<CourtProfileProvider>(context);
     return Container(
-      // width: 300,
-      // height: 415,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
           color: Colors.white,
@@ -224,40 +213,15 @@ class _OpenDays extends StatelessWidget {
         children: [
           const Text('Días abiertos'),
           const SizedBox(height: 10),
-          CheckboxListTile(
-            title: const Text('Lunes'),
-            onChanged: (value) {},
-            value: true,
-          ),
-          CheckboxListTile(
-            title: const Text('Martes'),
-            onChanged: (value) {},
-            value: true,
-          ),
-          CheckboxListTile(
-            title: const Text('Miercoles'),
-            onChanged: (value) {},
-            value: true,
-          ),
-          CheckboxListTile(
-            title: const Text('Jueves'),
-            onChanged: (value) {},
-            value: true,
-          ),
-          CheckboxListTile(
-            title: const Text('Viernes'),
-            onChanged: (value) {},
-            value: true,
-          ),
-          CheckboxListTile(
-            title: const Text('Sabado'),
-            onChanged: (value) {},
-            value: true,
-          ),
-          CheckboxListTile(
-            title: const Text('Domingo'),
-            onChanged: (value) {},
-            value: true,
+          ListView.builder(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            itemCount: courtForm.daysOfWeeks.length,
+            itemBuilder: (_, i) => CheckboxListTile(
+              title: Text(courtForm.daysOfWeeks[i].name),
+              value: courtForm.daysOfWeeks[i].value,
+              onChanged: (value) => courtForm.checkDaysOfWeek(value!, i),
+            ),
           ),
         ],
       ),
@@ -272,9 +236,8 @@ class _Facilities extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final courtForm = Provider.of<CourtProfileProvider>(context);
     return Container(
-      // width: 300,
-      // height: 260,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
           color: Colors.white,
@@ -285,25 +248,15 @@ class _Facilities extends StatelessWidget {
         children: [
           const Text('Facilidades'),
           const SizedBox(height: 10),
-          CheckboxListTile(
-            title: const Text('Baños'),
-            onChanged: (value) {},
-            value: true,
-          ),
-          CheckboxListTile(
-            title: const Text('Kioskos'),
-            onChanged: (value) {},
-            value: true,
-          ),
-          CheckboxListTile(
-            title: const Text('Duchas'),
-            onChanged: (value) {},
-            value: true,
-          ),
-          CheckboxListTile(
-            title: const Text('Acceso'),
-            onChanged: (value) {},
-            value: true,
+          ListView.builder(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            itemCount: courtForm.facilities.length,
+            itemBuilder: (_, i) => CheckboxListTile(
+              title: Text(courtForm.facilities[i].name),
+              value: courtForm.facilities[i].value,
+              onChanged: (value) => courtForm.checkFacilities(value!, i),
+            ),
           ),
         ],
       ),

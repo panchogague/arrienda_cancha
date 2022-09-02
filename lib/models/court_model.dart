@@ -12,6 +12,8 @@ class CourtModel {
   String howToAccess;
   String cancellationPolicy;
   String userId;
+  List<int>? openDays;
+  List<String>? facilities;
 
   Map<String, List<SlotTimeModel>>? slotTimePerDate;
 
@@ -22,6 +24,8 @@ class CourtModel {
         "cancellationPolicy": cancellationPolicy,
         "location": location,
         "userId": userId,
+        "openDays": openDays,
+        "facilities": facilities,
       };
 
   factory CourtModel.fromFireBase(Map<String, dynamic> json, String key) =>
@@ -34,7 +38,13 @@ class CourtModel {
           howToAccess: json["howToAccess"],
           location: json["location"],
           price: '',
-          userId: json["userId"]);
+          userId: json["userId"],
+          openDays: json.containsKey("openDays")
+              ? (json["openDays"] as List).map((e) => e as int).toList()
+              : null,
+          facilities: json.containsKey("facilities")
+              ? (json["facilities"] as List).map((e) => e as String).toList()
+              : null);
 
   //TODO: Pending
 
@@ -49,7 +59,9 @@ class CourtModel {
       required this.howToAccess,
       required this.cancellationPolicy,
       required this.userId,
-      this.rating});
+      this.rating,
+      this.openDays,
+      this.facilities});
 
 //TODO:borrar todo esto
 
