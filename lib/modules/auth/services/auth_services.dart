@@ -66,7 +66,7 @@ class AuthService extends ChangeNotifier {
 
   Future<String?> login(String email, String password) async {
     //TODO: Mock login remover esto
-    //return '';
+    return '';
 
     try {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
@@ -89,7 +89,7 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<String> readToken() async {
-    //return 'asasdasd';
+    return 'asasdasd';
 
     if (auth.currentUser != null) {
       var token = await auth.currentUser!.getIdTokenResult(true);

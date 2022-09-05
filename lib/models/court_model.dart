@@ -39,7 +39,7 @@ class CourtModel {
           location: json["location"],
           price: '',
           userId: json["userId"],
-          openDays: json['openDays'] is Iterable
+          openDays: json.containsKey("openDays")
               ? List.from(json['openDays'])
                   .map((e) => OpenDayModel.fromMap(e))
                   .toList()
