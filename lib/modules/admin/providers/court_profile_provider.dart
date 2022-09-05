@@ -1,7 +1,6 @@
 import 'package:court_finder/database/court_db.dart';
-import 'package:court_finder/models/court_model.dart';
 import 'package:court_finder/models/models.dart';
-import 'package:court_finder/modules/admin/models/checkbox_value_model.dart';
+import 'package:court_finder/modules/admin/models/models.dart';
 import 'package:flutter/material.dart';
 
 class CourtProfileProvider extends ChangeNotifier {
@@ -25,14 +24,14 @@ class CourtProfileProvider extends ChangeNotifier {
     }
   }
 
-  List<CheckboxValueModel> daysOfWeeks = [
-    CheckboxValueModel('Lunes', id: '1'),
-    CheckboxValueModel('Martes', id: '2'),
-    CheckboxValueModel('Miércoles', id: '3'),
-    CheckboxValueModel('Jueves', id: '4'),
-    CheckboxValueModel('Viernes', id: '5'),
-    CheckboxValueModel('Sábado', id: '6'),
-    CheckboxValueModel('Domingo', id: '7'),
+  List<CheckboxOpenDayModel> daysOfWeeks = [
+    CheckboxOpenDayModel('Lunes', id: '1'),
+    CheckboxOpenDayModel('Martes', id: '2'),
+    CheckboxOpenDayModel('Miércoles', id: '3'),
+    CheckboxOpenDayModel('Jueves', id: '4'),
+    CheckboxOpenDayModel('Viernes', id: '5'),
+    CheckboxOpenDayModel('Sábado', id: '6'),
+    CheckboxOpenDayModel('Domingo', id: '7'),
   ];
 
   bool _isLoading = false;
@@ -49,8 +48,17 @@ class CourtProfileProvider extends ChangeNotifier {
 
     if (court.openDays != null) {
       for (var day in court.openDays!) {
-        int indx = daysOfWeeks.indexWhere((i) => i.id == '$day');
+        int indx = daysOfWeeks.indexWhere((i) => i.id == '${day.dayId}');
         daysOfWeeks[indx].value = true;
+        TimeOfDay from = TimeOfDay(
+            hour: int.parse(day.from.split(":")[0]),
+            minute: int.parse(day.from.split(":")[1]));
+        daysOfWeeks[indx].from = from;
+
+        TimeOfDay to = TimeOfDay(
+            hour: int.parse(day.to.split(":")[0]),
+            minute: int.parse(day.to.split(":")[1]));
+        daysOfWeeks[indx].to = to;
       }
     }
 
@@ -67,10 +75,20 @@ class CourtProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void checkDaysOfWeek(bool b, int index) {
+  void checkDaysOfWeek(int index) {
     daysOfWeeks[index].value =
         !daysOfWeeks[index].value; // Individual task value
     notifyListeners();
+  }
+
+  void setHourDaysOfWeek(int index, TimeOfDay? from, TimeOfDay? to) {
+    if (from != null) {
+      daysOfWeeks[index].from = from;
+    }
+
+    if (to != null) {
+      daysOfWeeks[index].to = to;
+    }
   }
 
   bool isValidForm() {
@@ -80,8 +98,14 @@ class CourtProfileProvider extends ChangeNotifier {
   Future<String?> createOrUpdateCourt(String userId) async {
     court.userId = userId;
     court.openDays = [];
-    for (var day in daysOfWeeks.where((CheckboxValueModel d) => d.value)) {
-      court.openDays!.add(int.parse(day.id));
+    for (var day in daysOfWeeks.where((CheckboxOpenDayModel d) => d.value)) {
+      String from =
+          '${day.from!.hour.toString().padLeft(2, '0')}:${day.from!.minute.toString().padLeft(2, '0')}';
+      String to =
+          '${day.to!.hour.toString().padLeft(2, '0')}:${day.to!.minute.toString().padLeft(2, '0')}';
+
+      final openHour = OpenDayModel(int.parse(day.id), from, to);
+      court.openDays!.add(openHour);
     }
 
     court.facilities = [];

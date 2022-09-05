@@ -28,7 +28,10 @@ class AuthService extends ChangeNotifier {
         howToAccess: 'Sint et laboris occaecat cillum commodo ut. Pariatur laborum ullamco ex sit deserunt quis reprehenderit dolore amet aliqua. Aliqua est deserunt eiusmod veniam elit. Dolor deserunt sunt veniam voluptate in velit laborum enim sunt.',
         cancellationPolicy: 'Ad ea reprehenderit do velit in ut culpa labore ut irure elit eu.',
         userId: 'WnKjzpSNtAeaXmcNJ56YHVmL6S12',
-        openDays: [2, 3, 4, 5, 6]));
+        openDays: [
+          OpenDayModel(1, '09:00', '20:30'),
+          OpenDayModel(7, '09:00', '22:00')
+        ]));
   }
 
   //final storage = const FlutterSecureStorage();
@@ -63,7 +66,7 @@ class AuthService extends ChangeNotifier {
 
   Future<String?> login(String email, String password) async {
     //TODO: Mock login remover esto
-    // return '';
+    //return '';
 
     try {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(

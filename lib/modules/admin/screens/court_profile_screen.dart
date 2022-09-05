@@ -182,7 +182,7 @@ class _SelectArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return (size.width > 850.0)
+    return (size.width > 894.0)
         ? Row(crossAxisAlignment: CrossAxisAlignment.start, children: const [
             Expanded(child: _OpenDays()),
             SizedBox(width: 30),
@@ -213,16 +213,22 @@ class _OpenDays extends StatelessWidget {
         children: [
           const Text('Días abiertos'),
           const SizedBox(height: 10),
-          ListView.builder(
-            scrollDirection: Axis.vertical,
+          ListView.separated(
             shrinkWrap: true,
             itemCount: courtForm.daysOfWeeks.length,
-            itemBuilder: (_, i) => CheckboxListTile(
-              title: Text(courtForm.daysOfWeeks[i].name),
-              value: courtForm.daysOfWeeks[i].value,
-              onChanged: (value) => courtForm.checkDaysOfWeek(value!, i),
+            itemBuilder: (_, i) => OpenDayCheckbox(
+              title: courtForm.daysOfWeeks[i].name,
+              checkValue: courtForm.daysOfWeeks[i].value,
+              initialFrom: courtForm.daysOfWeeks[i].from,
+              initialTo: courtForm.daysOfWeeks[i].to,
+              onCheck: (value) => courtForm.checkDaysOfWeek(i),
+              onSelectedHourFrom: (value) =>
+                  courtForm.setHourDaysOfWeek(i, value, null),
+              onSelectedHourTo: (value) =>
+                  courtForm.setHourDaysOfWeek(i, null, value),
             ),
-          ),
+            separatorBuilder: (_, __) => const Divider(),
+          )
         ],
       ),
     );

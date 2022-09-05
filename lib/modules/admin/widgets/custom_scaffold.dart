@@ -16,8 +16,8 @@ class CustomScaffold extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xffF2F2F2),
       appBar: AppBar(title: Text(title)),
-      drawer: (size.width > 1208.0) ? null : const Drawer(child: AdminMenu()),
-      body: (size.width > 1208.0)
+      drawer: (size.width > 1218.0) ? null : const Drawer(child: AdminMenu()),
+      body: (size.width > 1218.0)
           ? Row(
               children: [
                 const AdminMenu(),

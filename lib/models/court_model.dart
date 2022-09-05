@@ -12,7 +12,7 @@ class CourtModel {
   String howToAccess;
   String cancellationPolicy;
   String userId;
-  List<int>? openDays;
+  List<OpenDayModel>? openDays;
   List<String>? facilities;
 
   Map<String, List<SlotTimeModel>>? slotTimePerDate;
@@ -24,7 +24,7 @@ class CourtModel {
         "cancellationPolicy": cancellationPolicy,
         "location": location,
         "userId": userId,
-        "openDays": openDays,
+        "openDays": openDays!.map((e) => e.toMap()).toList(),
         "facilities": facilities,
       };
 
@@ -39,8 +39,10 @@ class CourtModel {
           location: json["location"],
           price: '',
           userId: json["userId"],
-          openDays: json.containsKey("openDays")
-              ? (json["openDays"] as List).map((e) => e as int).toList()
+          openDays: json['openDays'] is Iterable
+              ? List.from(json['openDays'])
+                  .map((e) => OpenDayModel.fromMap(e))
+                  .toList()
               : null,
           facilities: json.containsKey("facilities")
               ? (json["facilities"] as List).map((e) => e as String).toList()

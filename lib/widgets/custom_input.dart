@@ -9,7 +9,9 @@ class CustomInput extends StatelessWidget {
       this.isPassword = false,
       this.onChanged,
       this.maxLine,
-      required this.initialValue})
+      required this.initialValue,
+      this.onTap,
+      this.readOnly = false})
       : super(key: key);
 
   final String hintText;
@@ -17,8 +19,10 @@ class CustomInput extends StatelessWidget {
   final TextInputType keyboardType;
   final bool isPassword;
   final Function(String)? onChanged;
+  final VoidCallback? onTap;
   final int? maxLine;
   final String initialValue;
+  final bool readOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +41,13 @@ class CustomInput extends StatelessWidget {
         child: TextField(
           controller: TextEditingController(text: initialValue),
           onChanged: onChanged,
+          onTap: onTap,
           autocorrect: false,
           keyboardType: keyboardType,
           obscureText: isPassword,
           maxLines: maxLine,
           cursorHeight: 20,
+          readOnly: readOnly,
           cursorColor: Theme.of(context).primaryColor,
           style: Theme.of(context).textTheme.headline4,
           decoration: InputDecoration(
