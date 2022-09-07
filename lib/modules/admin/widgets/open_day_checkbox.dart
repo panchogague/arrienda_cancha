@@ -105,24 +105,26 @@ class _OpenDayCheckboxState extends State<OpenDayCheckbox> {
 
   Widget _builWideContent() {
     return FadeIn(
-      child: Expanded(
-        child: Row(children: [
-          CustomInput(
+      child: Row(children: [
+        Expanded(
+          child: CustomInput(
               hintText: 'Abierto Desde',
               icon: Icons.timer_outlined,
               initialValue: horaFrom,
               readOnly: true,
               onTap: _selectTimeFrom),
-          const SizedBox(width: 10),
-          CustomInput(
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: CustomInput(
             hintText: 'Abierto Hasta',
             icon: Icons.timer_outlined,
             initialValue: horaTo,
             readOnly: true,
             onTap: _selectTimeTo,
-          )
-        ]),
-      ),
+          ),
+        )
+      ]),
     );
   }
 

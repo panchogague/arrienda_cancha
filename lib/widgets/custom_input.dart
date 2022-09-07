@@ -1,3 +1,4 @@
+import 'package:court_finder/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class CustomInput extends StatelessWidget {
@@ -26,35 +27,23 @@ class CustomInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: const EdgeInsets.only(top: 5, left: 5, bottom: 5, right: 20),
-        margin: const EdgeInsets.only(bottom: 15),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                  offset: const Offset(0, 5),
-                  blurRadius: 5,
-                  color: Colors.black.withOpacity(0.05)),
-            ]),
-        child: TextField(
-          controller: TextEditingController(text: initialValue),
-          onChanged: onChanged,
-          onTap: onTap,
-          autocorrect: false,
-          keyboardType: keyboardType,
-          obscureText: isPassword,
-          maxLines: maxLine,
-          cursorHeight: 20,
-          readOnly: readOnly,
-          cursorColor: Theme.of(context).primaryColor,
-          style: Theme.of(context).textTheme.headline4,
-          decoration: InputDecoration(
-              prefixIcon: Icon(icon, color: Theme.of(context).primaryColor),
-              focusedBorder: InputBorder.none,
-              border: InputBorder.none,
-              hintText: hintText),
-        ));
+    return InputContainer(TextField(
+      controller: TextEditingController(text: initialValue),
+      onChanged: onChanged,
+      onTap: onTap,
+      autocorrect: false,
+      keyboardType: keyboardType,
+      obscureText: isPassword,
+      maxLines: maxLine,
+      cursorHeight: 20,
+      readOnly: readOnly,
+      cursorColor: Theme.of(context).primaryColor,
+      style: Theme.of(context).textTheme.headline4,
+      decoration: InputDecoration(
+          prefixIcon: Icon(icon, color: Theme.of(context).primaryColor),
+          focusedBorder: InputBorder.none,
+          border: InputBorder.none,
+          hintText: hintText),
+    ));
   }
 }
