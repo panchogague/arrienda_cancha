@@ -440,7 +440,8 @@ class _PitchPicker extends StatelessWidget {
                 name: 'Cancha 1',
                 price: 4500,
                 size: '12 Jugadores',
-                surface: 'Sintético'),
+                surface: 'Sintético',
+                period: 30),
             index: 1,
           ),
           SlotPitch(
@@ -448,7 +449,8 @@ class _PitchPicker extends StatelessWidget {
                 name: 'Cancha 2',
                 price: 12400,
                 size: '12 Jugadores',
-                surface: 'Sintético'),
+                surface: 'Sintético',
+                period: 30),
             index: 2,
           ),
           SlotPitch(
@@ -456,14 +458,16 @@ class _PitchPicker extends StatelessWidget {
                   name: 'Cancha Pasto',
                   price: 35000,
                   size: '22 Jugadores',
-                  surface: 'Pasto'),
+                  surface: 'Pasto',
+                  period: 30),
               index: 3),
           SlotPitch(
               pitch: PitchModel(
                   name: 'Cancha Pasto 2',
                   price: 35000,
                   size: '22 Jugadores',
-                  surface: 'Pasto'),
+                  surface: 'Pasto',
+                  period: 30),
               isAvailable: false,
               index: 4),
           SlotPitch(
@@ -471,7 +475,8 @@ class _PitchPicker extends StatelessWidget {
                   name: 'Mini Cancha 2',
                   price: 6000,
                   size: '6 Jugadores',
-                  surface: 'Cemento'),
+                  surface: 'Cemento',
+                  period: 30),
               index: 5)
         ],
       ),

@@ -18,7 +18,7 @@ class AuthService extends ChangeNotifier {
       isAdmin: true,
     );
     userLogin!.adminCourts.add(CourtModel(
-        id: 'cRms8GVfTLOOKw5z5i7i',
+        id: 'aOviv7TpKkKLInZbKfaS',
         name: 'Canchas guaton linares',
         imgUrl: '',
         location: 'Calle Aranda #235',

@@ -7,6 +7,8 @@ class PitchModel {
   int price;
   String size;
   String surface;
+  int period;
+  String? categoryId;
 
   get priceFormated {
     final formatCurrency =
@@ -19,5 +21,16 @@ class PitchModel {
       {required this.name,
       required this.price,
       required this.size,
-      required this.surface});
+      required this.surface,
+      required this.period,
+      this.categoryId});
+
+  Map<String, dynamic> toMap() => {
+        "name": name,
+        "price": price,
+        "size": size,
+        "surface": surface,
+        "period": period,
+        "categoryId": categoryId,
+      };
 }

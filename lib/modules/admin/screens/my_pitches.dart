@@ -1,5 +1,7 @@
+import 'package:court_finder/modules/admin/providers/providers.dart';
 import 'package:court_finder/modules/admin/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MyPitchesScreen extends StatelessWidget {
   const MyPitchesScreen({Key? key}) : super(key: key);
@@ -13,7 +15,9 @@ class MyPitchesScreen extends StatelessWidget {
           showModalBottomSheet<void>(
             context: context,
             builder: (BuildContext context) {
-              return const PitchForm();
+              return ChangeNotifierProvider(
+                  create: (_) => MyPitchesFormProvider(),
+                  child: const PitchForm());
             },
           );
         },
