@@ -68,7 +68,7 @@ class SlotPitch extends StatelessWidget {
             pitch.name,
             style: style,
           ),
-          Text(pitch.size, style: TextStyle(color: textColor, fontSize: 12)),
+          Text(pitch.size!, style: TextStyle(color: textColor, fontSize: 12)),
           Text(
             pitch.priceFormated,
             style: style,

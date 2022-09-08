@@ -2,28 +2,42 @@ import 'package:court_finder/database/pitch_db.dart';
 import 'package:court_finder/models/models.dart';
 import 'package:flutter/material.dart';
 
-class MyPitchesFormProvider extends ChangeNotifier {
+class PitchesFormProvider extends ChangeNotifier {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  List<DropdownValueModel> categoriesDropdown = [
-    DropdownValueModel('-1', 'Seleccione'),
-  ];
-  List<DropdownValueModel> sizeDropdown = [
-    DropdownValueModel('-1', 'Seleccione'),
-  ];
-  List<DropdownValueModel> surfaceDropdown = [
-    DropdownValueModel('-1', 'Seleccione'),
-  ];
+  List<DropdownValueModel> categoriesDropdown = [];
+  List<String> sizeDropdown = [];
+  List<String> surfaceDropdown = [];
   List<DropdownValueModel> periodDropdown = [
-    DropdownValueModel('-1', 'Seleccione'),
     DropdownValueModel('30', '30 min'),
     DropdownValueModel('45', '45 min'),
     DropdownValueModel('60', '1 hora'),
     DropdownValueModel('90', '1 hora 30 min'),
     DropdownValueModel('120', '2 hora'),
   ];
+
   List<CategoryModel> _categories = [];
-  PitchModel pitch =
-      PitchModel(name: '', price: 0, surface: '', period: 0, size: '');
+  PitchModel pitch = PitchModel(
+      name: '',
+      price: 0,
+      surface: null,
+      period: 0,
+      size: null,
+      categoryId: null);
+
+  String? _sizeValue;
+  String? get sizeValue => _sizeValue;
+  set sizeValue(val) {
+    _sizeValue = val;
+    notifyListeners();
+  }
+
+//Optimizar esta parte, me daba error al usar el objeto
+  String? _surfaceValue;
+  String? get surfaceValue => _surfaceValue;
+  set surfaceValue(val) {
+    _surfaceValue = val;
+    notifyListeners();
+  }
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -37,7 +51,7 @@ class MyPitchesFormProvider extends ChangeNotifier {
   }
 
   loadCategoriesDropdown(List<CategoryModel> categories) {
-    if (categoriesDropdown.length == 1) {
+    if (categoriesDropdown.isEmpty) {
       categoriesDropdown.addAll(
           categories.map((e) => DropdownValueModel(e.id!, e.name)).toList());
       _categories = categories;
@@ -46,27 +60,24 @@ class MyPitchesFormProvider extends ChangeNotifier {
   }
 
   loadDropdown(String categoryId) {
-    if (categoryId != '-1') {
-      sizeDropdown = [
-        DropdownValueModel('-1', 'Seleccione'),
-      ];
-      sizeDropdown.addAll(_categories
-          .firstWhere((cat) => cat.id == categoryId)
-          .sizes
-          .map((e) => DropdownValueModel(e, e))
-          .toList());
+    pitch.size = null;
+    pitch.surface = null;
+    surfaceDropdown = [];
+    sizeDropdown = [];
 
-      surfaceDropdown = [
-        DropdownValueModel('-1', 'Seleccione'),
-      ];
-      surfaceDropdown.addAll(_categories
-          .firstWhere((cat) => cat.id == categoryId)
-          .surfaces
-          .map((e) => DropdownValueModel(e, e))
-          .toList());
+    sizeDropdown.addAll(_categories
+        .firstWhere((cat) => cat.id == categoryId)
+        .sizes
+        .map((e) => e)
+        .toList());
 
-      notifyListeners();
-    }
+    surfaceDropdown.addAll(_categories
+        .firstWhere((cat) => cat.id == categoryId)
+        .surfaces
+        .map((e) => e)
+        .toList());
+
+    notifyListeners();
   }
 
   Future<String?> savePitch(String courtId) async {

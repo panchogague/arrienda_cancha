@@ -14,7 +14,7 @@ class PitchForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final categorieService = Provider.of<CategoryService>(context);
-    final formProvider = Provider.of<MyPitchesFormProvider>(context);
+    final formProvider = Provider.of<PitchesFormProvider>(context);
     formProvider.loadCategoriesDropdown(categorieService.categories);
 
     final Map<String, Widget> form = {
@@ -27,15 +27,18 @@ class PitchForm extends StatelessWidget {
       'categoria': CustomDropdown(
         hintText: 'Seleccione Categoría',
         icon: Icons.category_outlined,
+        value: formProvider.pitch.categoryId,
         items: formProvider.categoriesDropdown.map((DropdownValueModel value) {
-          return DropdownMenuItem<DropdownValueModel>(
-            value: value,
+          return DropdownMenuItem<String>(
+            value: value.value,
             child: Text(value.text),
           );
         }).toList(),
         onChanged: (value) {
-          formProvider.pitch.categoryId = value!.value;
-          formProvider.loadDropdown(value.value);
+          formProvider.sizeValue = null;
+          formProvider.surfaceValue = null;
+          formProvider.pitch.categoryId = value;
+          formProvider.loadDropdown(value!);
         },
       ),
       'precio': CustomInput(
@@ -49,36 +52,43 @@ class PitchForm extends StatelessWidget {
       'tamaño': CustomDropdown(
         hintText: 'Seleccione Tamaño',
         icon: FontAwesomeIcons.ruler,
-        items: formProvider.sizeDropdown.map((DropdownValueModel value) {
-          return DropdownMenuItem<DropdownValueModel>(
+        value: formProvider.sizeValue,
+        items: formProvider.sizeDropdown.map((String value) {
+          return DropdownMenuItem<String>(
             value: value,
-            child: Text(value.text),
+            child: Text(value),
           );
         }).toList(),
-        onChanged: (value) => formProvider.pitch.size = value!.text,
+        onChanged: (value) {
+          formProvider.sizeValue = value;
+          formProvider.pitch.size = value!;
+        },
       ),
       'periodo': CustomDropdown(
         hintText: 'Seleccione Periodo',
         icon: Icons.timer_outlined,
         items: formProvider.periodDropdown.map((DropdownValueModel value) {
-          return DropdownMenuItem<DropdownValueModel>(
-            value: value,
+          return DropdownMenuItem<String>(
+            value: value.value,
             child: Text(value.text),
           );
         }).toList(),
-        onChanged: (value) =>
-            formProvider.pitch.period = int.parse(value!.value),
+        onChanged: (value) => formProvider.pitch.period = int.parse(value!),
       ),
       'superficie': CustomDropdown(
         hintText: 'Seleccione Superficie',
         icon: Icons.layers_outlined,
-        items: formProvider.surfaceDropdown.map((DropdownValueModel value) {
-          return DropdownMenuItem<DropdownValueModel>(
+        value: formProvider.surfaceValue,
+        items: formProvider.surfaceDropdown.map((String value) {
+          return DropdownMenuItem<String>(
             value: value,
-            child: Text(value.text),
+            child: Text(value),
           );
         }).toList(),
-        onChanged: (value) => formProvider.pitch.surface = value!.text,
+        onChanged: (value) {
+          formProvider.surfaceValue = value;
+          formProvider.pitch.surface = value!;
+        },
       ),
     };
     return Container(
@@ -229,7 +239,7 @@ class _SaveButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formProvider = Provider.of<MyPitchesFormProvider>(context);
+    final formProvider = Provider.of<PitchesFormProvider>(context);
     return MaterialButton(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         disabledColor: Colors.grey,

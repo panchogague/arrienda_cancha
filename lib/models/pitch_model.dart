@@ -5,8 +5,8 @@ import 'package:intl/intl.dart';
 class PitchModel {
   String name;
   int price;
-  String size;
-  String surface;
+  String? size;
+  String? surface;
   int period;
   String? categoryId;
 
@@ -20,8 +20,8 @@ class PitchModel {
   PitchModel(
       {required this.name,
       required this.price,
-      required this.size,
-      required this.surface,
+      this.size,
+      this.surface,
       required this.period,
       this.categoryId});
 

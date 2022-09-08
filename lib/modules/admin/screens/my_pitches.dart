@@ -16,7 +16,7 @@ class MyPitchesScreen extends StatelessWidget {
             context: context,
             builder: (BuildContext context) {
               return ChangeNotifierProvider(
-                  create: (_) => MyPitchesFormProvider(),
+                  create: (_) => PitchesFormProvider(),
                   child: const PitchForm());
             },
           );
