@@ -1,3 +1,4 @@
+import 'package:court_finder/modules/admin/providers/providers.dart';
 import 'package:court_finder/modules/admin/screens/screens.dart';
 import 'package:court_finder/modules/auth/services/services.dart';
 import 'package:court_finder/services/services.dart';
@@ -34,6 +35,14 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthService()),
         ChangeNotifierProvider(create: (_) => CategoryService()),
         ChangeNotifierProvider(create: (_) => CourtService()),
+
+        //Admin
+        ChangeNotifierProxyProvider<CategoryService, PitchesFormProvider>(
+          create: (context) => PitchesFormProvider([]),
+          update: (context, cat, pitch) => PitchesFormProvider(cat.categories),
+        ),
+
+        // ChangeNotifierProvider(create: (_) => PitchesFormProvider())
       ],
       child: MaterialApp(
         localizationsDelegates: const [

@@ -10,28 +10,38 @@ class AuthService extends ChangeNotifier {
   UserModel? userLogin;
 
   AuthService() {
-    userLogin = UserModel(
-      email: 'test@test.com',
-      firstName: 'test',
-      lastName: 'lasttest',
-      userId: 'WnKjzpSNtAeaXmcNJ56YHVmL6S12',
-      isAdmin: true,
-    );
-    userLogin!.adminCourts.add(CourtModel(
-        id: 'aOviv7TpKkKLInZbKfaS',
-        name: 'Canchas guaton linares',
-        imgUrl: '',
-        location: 'Calle Aranda #235',
-        price: '',
-        description:
-            'Anim nostrud mollit laboris enim exercitation ex in excepteur sint exercitation voluptate nulla. Qui officia enim laborum cupidatat laboris Lorem nulla adipisicing. Non mollit velit consequat voluptate cillum est. Non sit esse sit voluptate sit nisi consectetur laborum pariatur elit velit laboris irure.',
-        howToAccess: 'Sint et laboris occaecat cillum commodo ut. Pariatur laborum ullamco ex sit deserunt quis reprehenderit dolore amet aliqua. Aliqua est deserunt eiusmod veniam elit. Dolor deserunt sunt veniam voluptate in velit laborum enim sunt.',
-        cancellationPolicy: 'Ad ea reprehenderit do velit in ut culpa labore ut irure elit eu.',
-        userId: 'WnKjzpSNtAeaXmcNJ56YHVmL6S12',
-        openDays: [
-          OpenDayModel(1, '09:00', '20:30'),
-          OpenDayModel(7, '09:00', '22:00')
-        ]));
+    //No SHeee!
+    auth.authStateChanges().listen((User? user) async {
+      if (user != null && userLogin == null) {
+        await loadUserData(user.uid);
+        notifyListeners();
+      }
+    });
+    // userLogin = UserModel(
+    //   email: 'test@test.com',
+    //   firstName: 'test',
+    //   lastName: 'lasttest',
+    //   userId: 'WnKjzpSNtAeaXmcNJ56YHVmL6S12',
+    //   isAdmin: true,
+    // );
+    // userLogin!.adminCourts.add(CourtModel(
+    //     categories: [],
+    //     id: 'aOviv7TpKkKLInZbKfaS',
+    //     name: 'Canchas guaton linares',
+    //     imgUrl: '',
+    //     location: 'Calle Aranda #235',
+    //     description:
+    //         'Anim nostrud mollit laboris enim exercitation ex in excepteur sint exercitation voluptate nulla. Qui officia enim laborum cupidatat laboris Lorem nulla adipisicing. Non mollit velit consequat voluptate cillum est. Non sit esse sit voluptate sit nisi consectetur laborum pariatur elit velit laboris irure.',
+    //     howToAccess:
+    //         'Sint et laboris occaecat cillum commodo ut. Pariatur laborum ullamco ex sit deserunt quis reprehenderit dolore amet aliqua. Aliqua est deserunt eiusmod veniam elit. Dolor deserunt sunt veniam voluptate in velit laborum enim sunt.',
+    //     cancellationPolicy:
+    //         'Ad ea reprehenderit do velit in ut culpa labore ut irure elit eu.',
+    //     userId: 'WnKjzpSNtAeaXmcNJ56YHVmL6S12',
+    //     openDays: [
+    //       OpenDayModel(1, '09:00', '20:30'),
+    //       OpenDayModel(7, '09:00', '22:00')
+    //     ],
+    //     priceFrom: null));
   }
 
   //final storage = const FlutterSecureStorage();
@@ -66,7 +76,7 @@ class AuthService extends ChangeNotifier {
 
   Future<String?> login(String email, String password) async {
     //TODO: Mock login remover esto
-    return '';
+    //return '';
 
     try {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
@@ -89,7 +99,7 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<String> readToken() async {
-    return 'asasdasd';
+    // return 'asasdasd';
 
     if (auth.currentUser != null) {
       var token = await auth.currentUser!.getIdTokenResult(true);

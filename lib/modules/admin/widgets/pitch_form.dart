@@ -13,21 +13,19 @@ class PitchForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final categorieService = Provider.of<CategoryService>(context);
     final formProvider = Provider.of<PitchesFormProvider>(context);
-    formProvider.loadCategoriesDropdown(categorieService.categories);
 
     final Map<String, Widget> form = {
       'nombre_cancha': CustomInput(
-        initialValue: formProvider.pitch.name,
-        onChanged: (value) => formProvider.pitch.name = value,
+        initialValue: formProvider.name,
+        onChanged: (value) => formProvider.name = value,
         hintText: 'Nombre Cancha',
         icon: FontAwesomeIcons.addressCard,
       ),
       'categoria': CustomDropdown(
         hintText: 'Seleccione Categoría',
         icon: Icons.category_outlined,
-        value: formProvider.pitch.categoryId,
+        value: formProvider.categoryId,
         items: formProvider.categoriesDropdown.map((DropdownValueModel value) {
           return DropdownMenuItem<String>(
             value: value.value,
@@ -37,14 +35,13 @@ class PitchForm extends StatelessWidget {
         onChanged: (value) {
           formProvider.sizeValue = null;
           formProvider.surfaceValue = null;
-          formProvider.pitch.categoryId = value;
+          formProvider.categoryId = value;
           formProvider.loadDropdown(value!);
         },
       ),
       'precio': CustomInput(
-        initialValue:
-            formProvider.pitch.price > 0 ? '${formProvider.pitch.price}' : '',
-        onChanged: (value) => formProvider.pitch.price = int.parse(value),
+        initialValue: formProvider.price,
+        onChanged: (value) => formProvider.price = value,
         keyboardType: TextInputType.number,
         hintText: 'Precio',
         icon: Icons.attach_money_outlined,
@@ -59,21 +56,19 @@ class PitchForm extends StatelessWidget {
             child: Text(value),
           );
         }).toList(),
-        onChanged: (value) {
-          formProvider.sizeValue = value;
-          formProvider.pitch.size = value!;
-        },
+        onChanged: (value) => formProvider.sizeValue = value,
       ),
       'periodo': CustomDropdown(
         hintText: 'Seleccione Periodo',
         icon: Icons.timer_outlined,
+        value: formProvider.period,
         items: formProvider.periodDropdown.map((DropdownValueModel value) {
           return DropdownMenuItem<String>(
             value: value.value,
             child: Text(value.text),
           );
         }).toList(),
-        onChanged: (value) => formProvider.pitch.period = int.parse(value!),
+        onChanged: (value) => formProvider.period = value!,
       ),
       'superficie': CustomDropdown(
         hintText: 'Seleccione Superficie',
@@ -85,10 +80,7 @@ class PitchForm extends StatelessWidget {
             child: Text(value),
           );
         }).toList(),
-        onChanged: (value) {
-          formProvider.surfaceValue = value;
-          formProvider.pitch.surface = value!;
-        },
+        onChanged: (value) => formProvider.surfaceValue = value,
       ),
     };
     return Container(
@@ -125,10 +117,12 @@ class PitchForm extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Text(
-                      'Agregar Cancha',
-                      style:
-                          TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                    Text(
+                      formProvider.id != null
+                          ? 'Editar Cancha'
+                          : 'Agregar Cancha',
+                      style: const TextStyle(
+                          fontSize: 30, fontWeight: FontWeight.bold),
                     ),
                     LayoutBuilder(builder: (context, constraints) {
                       if (constraints.maxWidth > 600) {
@@ -257,7 +251,7 @@ class _SaveButton extends StatelessWidget {
                     Provider.of<AuthService>(context, listen: false);
 
                 final resp = await formProvider
-                    .savePitch(authService.userLogin!.adminCourts[0].id!);
+                    .savePitch(authService.userLogin!.adminCourts[0]);
 
                 formProvider.isLoading = false;
                 navigator.pop();

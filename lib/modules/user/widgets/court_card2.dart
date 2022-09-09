@@ -31,7 +31,7 @@ class CourtCard2 extends StatelessWidget {
               _Content(
                 title: court.name,
                 location: court.location,
-                price: court.price,
+                price: court.priceFormated,
               ),
               const Spacer(),
               if (isNormalScreen) const LikeButton(),

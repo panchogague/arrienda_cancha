@@ -10,7 +10,9 @@ class CourtDB {
         final courtDB = _db.collection('courts').doc(court.id);
         courtDB.update(court.toMap());
       } else {
-        await _db.collection('courts').doc().set(court.toMap());
+        final ref = _db.collection('courts').doc();
+        await ref.set(court.toMap());
+        court.id = ref.id;
       }
       return null;
     } catch (e) {

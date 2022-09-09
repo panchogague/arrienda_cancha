@@ -20,8 +20,6 @@ class UserDB {
       userLogin = UserModel.fromFireBase(userDB.data()!, userDB.id);
 
       if (userLogin.isAdmin) {
-        //TODO:cargar la info del recinto y las canchas
-        //TODO:mover la db a archivos
         final courts = await _db
             .collection('courts')
             .where('userId', isEqualTo: userId)
@@ -29,7 +27,15 @@ class UserDB {
         //Por ahora vamos a trabajar 1 usuario 1 recinto, pero queda abierto para agregar mas recintos por usuario
         for (var element in courts.docs) {
           final data = element.data();
-          userLogin.adminCourts.add(CourtModel.fromFireBase(data, element.id));
+          final pitchesResult =
+              await element.reference.collection('pitches').get();
+
+          final pitches = pitchesResult.docs
+              .map((e) => PitchModel.fromFireBase(e.data(), e.id))
+              .toList();
+          final court = CourtModel.fromFireBase(data, element.id);
+          court.pitches = pitches;
+          userLogin.adminCourts.add(court);
         }
       }
     } catch (error) {

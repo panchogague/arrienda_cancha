@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:court_finder/database/court_db.dart';
 import 'package:court_finder/database/pitch_db.dart';
 import 'package:court_finder/models/models.dart';
 import 'package:flutter/material.dart';
@@ -15,23 +18,29 @@ class PitchesFormProvider extends ChangeNotifier {
     DropdownValueModel('120', '2 hora'),
   ];
 
-  List<CategoryModel> _categories = [];
-  PitchModel pitch = PitchModel(
-      name: '',
-      price: 0,
-      surface: null,
-      period: 0,
-      size: null,
-      categoryId: null);
+  final List<CategoryModel> _categories;
 
+  PitchModel? pitch;
+  PitchesFormProvider(this._categories) {
+    if (categoriesDropdown.isEmpty) {
+      categoriesDropdown.addAll(
+          _categories.map((e) => DropdownValueModel(e.id!, e.name)).toList());
+    }
+  }
+
+  String? id;
+  String price = '';
+  String name = '';
+  String? categoryId;
+  String? category;
   String? _sizeValue;
+  String? period;
   String? get sizeValue => _sizeValue;
   set sizeValue(val) {
     _sizeValue = val;
     notifyListeners();
   }
 
-//Optimizar esta parte, me daba error al usar el objeto
   String? _surfaceValue;
   String? get surfaceValue => _surfaceValue;
   set surfaceValue(val) {
@@ -50,37 +59,95 @@ class PitchesFormProvider extends ChangeNotifier {
     return formKey.currentState?.validate() ?? false;
   }
 
-  loadCategoriesDropdown(List<CategoryModel> categories) {
-    if (categoriesDropdown.isEmpty) {
-      categoriesDropdown.addAll(
-          categories.map((e) => DropdownValueModel(e.id!, e.name)).toList());
-      _categories = categories;
+  loadDropdown(String categoryId, {bool isNotify = true}) {
+    _sizeValue = null;
+    _surfaceValue = null;
+    surfaceDropdown = [];
+    sizeDropdown = [];
+
+    if (_categories.isNotEmpty) {
+      category = _categories.firstWhere((c) => c.id == categoryId).name;
+
+      sizeDropdown.addAll(_categories
+          .firstWhere((cat) => cat.id == categoryId)
+          .sizes
+          .map((e) => e)
+          .toList());
+
+      surfaceDropdown.addAll(_categories
+          .firstWhere((cat) => cat.id == categoryId)
+          .surfaces
+          .map((e) => e)
+          .toList());
+    }
+
+    if (isNotify) {
       notifyListeners();
     }
   }
 
-  loadDropdown(String categoryId) {
-    pitch.size = null;
-    pitch.surface = null;
-    surfaceDropdown = [];
-    sizeDropdown = [];
+  Future<String?> savePitch(CourtModel court) async {
+    if (pitch != null) {
+      pitch!.name = name;
+      pitch!.price = int.parse(price);
+      pitch!.period = int.parse(period!);
+      pitch!.size = _sizeValue;
+      pitch!.surface = _surfaceValue;
+      pitch!.category = category;
+      pitch!.categoryId = categoryId;
+    } else {
+      pitch = PitchModel(
+          name: name,
+          price: int.parse(price),
+          period: int.parse(period!),
+          id: id,
+          size: _sizeValue,
+          surface: _surfaceValue,
+          category: category,
+          categoryId: categoryId);
+    }
 
-    sizeDropdown.addAll(_categories
-        .firstWhere((cat) => cat.id == categoryId)
-        .sizes
-        .map((e) => e)
-        .toList());
+    bool isInsert = pitch!.id == null;
 
-    surfaceDropdown.addAll(_categories
-        .firstWhere((cat) => cat.id == categoryId)
-        .surfaces
-        .map((e) => e)
-        .toList());
+    String? resp = await PitchDB().createOrUpdatePitch(court.id!, pitch!);
+    if (resp == null) {
+      if (isInsert) {
+        court.pitches.insert(0, pitch!);
+      }
+      court.priceFrom = court.pitches.map((e) => e.price).reduce(min);
+      if (!court.categories.contains(pitch!.categoryId)) {
+        court.categories.add(pitch!.categoryId!);
+      }
+      await CourtDB().createOrUpdateCourt(court);
+    }
+    notifyListeners();
+    return resp;
+  }
 
+  void setValues(PitchModel model) {
+    pitch = model;
+    loadDropdown(model.categoryId!, isNotify: false);
+    name = model.name;
+    category = model.category;
+    categoryId = model.categoryId;
+    id = model.id;
+    period = '${model.period}';
+    _sizeValue = model.size;
+    _surfaceValue = model.surface;
+    price = '${model.price}';
     notifyListeners();
   }
 
-  Future<String?> savePitch(String courtId) async {
-    return await PitchDB().savePitch(courtId, pitch);
+  void cleanValues() {
+    name = '';
+    price = '';
+    period = null;
+    id = null;
+    _sizeValue = null;
+    _surfaceValue = null;
+    category = '';
+    categoryId = null;
+    sizeDropdown = [];
+    surfaceDropdown = [];
   }
 }

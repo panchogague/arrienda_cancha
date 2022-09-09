@@ -13,8 +13,9 @@ class CourtProfileProvider extends ChangeNotifier {
       description: '',
       cancellationPolicy: '',
       imgUrl: '',
-      price: '',
-      userId: '');
+      priceFrom: null,
+      userId: '',
+      categories: []);
 
   List<CheckboxValueModel> facilities = [];
 

@@ -4,14 +4,21 @@ import 'package:court_finder/models/models.dart';
 class PitchDB {
   final _db = FirebaseFirestore.instance;
 
-  Future<String?> savePitch(String courtId, PitchModel pitch) async {
+  Future<String?> createOrUpdatePitch(String courtId, PitchModel pitch) async {
     try {
-      await _db
-          .collection('courts')
-          .doc(courtId)
-          .collection('pitches')
-          .doc()
-          .set(pitch.toMap());
+      if (pitch.id != null) {
+        final pitchDB = _db
+            .collection('courts')
+            .doc(courtId)
+            .collection('pitches')
+            .doc(pitch.id);
+        await pitchDB.update(pitch.toMap());
+      } else {
+        final ref =
+            _db.collection('courts').doc(courtId).collection('pitches').doc();
+        await ref.set(pitch.toMap());
+        pitch.id = ref.id;
+      }
       return null;
     } catch (e) {
       print(e);
