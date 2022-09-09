@@ -26,4 +26,8 @@ class FormatHelper {
 
     return formatCurrency.format(price);
   }
+
+  static String convertTime(int hour, int min) {
+    return '${hour.toString().padLeft(2, '0')}:${min.toString().padLeft(2, '0')}';
+  }
 }

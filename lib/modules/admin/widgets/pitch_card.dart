@@ -86,7 +86,7 @@ class PitchCard extends StatelessWidget {
                           Icons.delete_outline,
                           color: Colors.white,
                         )),
-                    Spacer(),
+                    const Spacer(),
                     Text(model.priceFormated,
                         style: Theme.of(context).textTheme.bodyText1),
                     Text('/ ${model.periodFormated}',

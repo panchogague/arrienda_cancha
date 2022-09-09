@@ -1,4 +1,3 @@
-import 'package:court_finder/models/models.dart';
 import 'package:court_finder/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 

@@ -1,4 +1,5 @@
 import 'package:court_finder/database/court_db.dart';
+import 'package:court_finder/helpers/format_helper.dart';
 import 'package:court_finder/models/models.dart';
 import 'package:court_finder/modules/admin/models/models.dart';
 import 'package:flutter/material.dart';
@@ -100,10 +101,8 @@ class CourtProfileProvider extends ChangeNotifier {
     court.userId = userId;
     court.openDays = [];
     for (var day in daysOfWeeks.where((CheckboxOpenDayModel d) => d.value)) {
-      String from =
-          '${day.from!.hour.toString().padLeft(2, '0')}:${day.from!.minute.toString().padLeft(2, '0')}';
-      String to =
-          '${day.to!.hour.toString().padLeft(2, '0')}:${day.to!.minute.toString().padLeft(2, '0')}';
+      String from = FormatHelper.convertTime(day.from!.hour, day.from!.minute);
+      String to = FormatHelper.convertTime(day.to!.hour, day.to!.minute);
 
       final openHour = OpenDayModel(int.parse(day.id), from, to);
       court.openDays!.add(openHour);
