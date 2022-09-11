@@ -25,4 +25,19 @@ class PitchDB {
       return 'Error al guardar la data';
     }
   }
+
+  Future<String?> deletePitch(String courtId, String id) async {
+    try {
+      await _db
+          .collection('courts')
+          .doc(courtId)
+          .collection('pitches')
+          .doc(id)
+          .delete();
+    } catch (e) {
+      print(e);
+      return 'Error al borrar registro';
+    }
+    return null;
+  }
 }

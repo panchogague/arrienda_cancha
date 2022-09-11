@@ -1,7 +1,10 @@
+import 'package:court_finder/helpers/show_alert_helper.dart';
 import 'package:court_finder/models/models.dart';
 import 'package:court_finder/modules/admin/providers/providers.dart';
 import 'package:court_finder/modules/admin/widgets/widgets.dart';
+import 'package:court_finder/modules/auth/services/services.dart';
 import 'package:court_finder/modules/user/widgets/widgets.dart';
+import 'package:court_finder/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +17,7 @@ class PitchCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formProvider = Provider.of<PitchesFormProvider>(context);
+    final pitchService = Provider.of<PitchService>(context);
     return Card(
       elevation: 1,
       clipBehavior: Clip.antiAlias,
@@ -60,9 +64,13 @@ class PitchCard extends StatelessWidget {
                         onPressed: () {
                           formProvider.setValues(model);
                           showModalBottomSheet<void>(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  const PitchForm());
+                            isScrollControlled: true,
+                            context: context,
+                            builder: (BuildContext context) {
+                              return const FractionallySizedBox(
+                                  heightFactor: 0.9, child: PitchForm());
+                            },
+                          );
                         },
                         color: Theme.of(context).primaryColor,
                         shape: RoundedRectangleBorder(
@@ -76,7 +84,30 @@ class PitchCard extends StatelessWidget {
                     MaterialButton(
                         minWidth: 10,
                         onPressed: () {
-                          //TODO:desactivar cancha
+                          //TODO: validar que no existan bookings asociados a la cancha a borrar
+                          ShowConfirmHelper(
+                              title: 'Por favor, confirme',
+                              subtitle: formProvider.isLoading
+                                  ? 'Borrando...'
+                                  : '¿Estas seguro de querer borrar esta cancha?',
+                              onPressed: () async {
+                                final navigator = Navigator.of(context);
+                                final courtService = Provider.of<CourtService>(
+                                    context,
+                                    listen: false);
+                                final resp = await formProvider.deletePitch(
+                                    courtService.court!, model.id!);
+                                navigator.pop();
+                                if (resp != null) {
+                                  NotificationService.showSnackbar(resp);
+                                } else {
+                                  pitchService.refreshGrid();
+                                  NotificationService.showSnackbar(
+                                      'Cancha eliminada con éxito');
+                                }
+                              }).showAlert(context);
+
+                          if (formProvider.isLoading) {}
                         },
                         color: Colors.red,
                         shape: RoundedRectangleBorder(

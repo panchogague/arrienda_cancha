@@ -39,6 +39,8 @@ class _SubmitButton extends StatelessWidget {
               courtForm.isLoading = true;
               final authService =
                   Provider.of<AuthService>(context, listen: false);
+              final courtService =
+                  Provider.of<CourtService>(context, listen: false);
 
               final resp = await courtForm
                   .createOrUpdateCourt(authService.userLogin!.userId!);
@@ -46,6 +48,7 @@ class _SubmitButton extends StatelessWidget {
               if (resp != null) {
                 NotificationService.showSnackbar(resp);
               } else {
+                courtService.court = courtForm.court;
                 NotificationService.showSnackbar('Datos guardados con éxito');
               }
 
@@ -68,9 +71,9 @@ class _CourtProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final courtForm = Provider.of<CourtProfileProvider>(context, listen: false);
-    final auth = Provider.of<AuthService>(context, listen: false);
-    if (auth.userLogin!.adminCourts.isNotEmpty) {
-      courtForm.initialize(auth.userLogin!.adminCourts[0]);
+    final courtService = Provider.of<CourtService>(context, listen: false);
+    if (courtService.court != null) {
+      courtForm.initialize(courtService.court!);
     }
 
     return Container(

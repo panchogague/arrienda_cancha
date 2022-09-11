@@ -124,6 +124,26 @@ class PitchesFormProvider extends ChangeNotifier {
     return resp;
   }
 
+  Future<String?> deletePitch(CourtModel court, String id) async {
+    isLoading = true;
+    String? resp = await PitchDB().deletePitch(court.id!, id);
+    if (resp == null) {
+      court.pitches.removeWhere((pitch) => pitch.id == id);
+      court.priceFrom = court.pitches.map((e) => e.price).reduce(min);
+      court.categories = [];
+
+      for (var pitch in court.pitches) {
+        if (!court.categories.contains(pitch.categoryId)) {
+          court.categories.add(pitch.categoryId!);
+        }
+      }
+
+      await CourtDB().createOrUpdateCourt(court);
+    }
+    isLoading = false;
+    return resp;
+  }
+
   void setValues(PitchModel model) {
     pitch = model;
     loadDropdown(model.categoryId!, isNotify: false);
@@ -149,5 +169,6 @@ class PitchesFormProvider extends ChangeNotifier {
     categoryId = null;
     sizeDropdown = [];
     surfaceDropdown = [];
+    pitch = null;
   }
 }

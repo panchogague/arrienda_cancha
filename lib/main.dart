@@ -34,7 +34,20 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => BookingProvider()),
         ChangeNotifierProvider(create: (_) => AuthService()),
         ChangeNotifierProvider(create: (_) => CategoryService()),
-        ChangeNotifierProvider(create: (_) => CourtService()),
+
+        ChangeNotifierProxyProvider<AuthService, CourtService>(
+          create: (context) => CourtService(null),
+          update: (context, auth, court) => CourtService(
+              (auth.userLogin!.adminCourts.isNotEmpty)
+                  ? auth.userLogin!.adminCourts[0]
+                  : null),
+        ),
+
+        ChangeNotifierProxyProvider<CourtService, PitchService>(
+          create: (context) => PitchService([]),
+          update: (context, court, pitch) =>
+              PitchService(court.court != null ? court.court!.pitches : []),
+        ),
 
         //Admin
         ChangeNotifierProxyProvider<CategoryService, PitchesFormProvider>(

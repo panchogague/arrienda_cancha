@@ -84,7 +84,6 @@ class PitchForm extends StatelessWidget {
       ),
     };
     return Container(
-      height: size.height * 0.6,
       color: const Color(0xffF2F2F2),
       child: Stack(
         children: [
@@ -234,6 +233,7 @@ class _SaveButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formProvider = Provider.of<PitchesFormProvider>(context);
+    final pitchService = Provider.of<PitchService>(context);
     return MaterialButton(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         disabledColor: Colors.grey,
@@ -247,11 +247,15 @@ class _SaveButton extends StatelessWidget {
                 if (!formProvider.isValidForm()) return;
 
                 formProvider.isLoading = true;
-                final authService =
-                    Provider.of<AuthService>(context, listen: false);
+                final courtService =
+                    Provider.of<CourtService>(context, listen: false);
+                bool isInsert = formProvider.pitch == null;
+                final resp = await formProvider.savePitch(courtService.court!);
 
-                final resp = await formProvider
-                    .savePitch(authService.userLogin!.adminCourts[0]);
+                if (isInsert) {
+                  pitchService.refreshGrid();
+                }
+                //continuar
 
                 formProvider.isLoading = false;
                 navigator.pop();
