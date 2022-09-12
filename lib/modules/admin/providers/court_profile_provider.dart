@@ -1,5 +1,4 @@
 import 'package:court_finder/database/court_db.dart';
-import 'package:court_finder/helpers/format_helper.dart';
 import 'package:court_finder/models/models.dart';
 import 'package:court_finder/modules/admin/models/models.dart';
 import 'package:flutter/material.dart';
@@ -52,15 +51,11 @@ class CourtProfileProvider extends ChangeNotifier {
       for (var day in court.openDays!) {
         int indx = daysOfWeeks.indexWhere((i) => i.id == '${day.dayId}');
         daysOfWeeks[indx].value = true;
-        TimeOfDay from = TimeOfDay(
-            hour: int.parse(day.from.split(":")[0]),
-            minute: int.parse(day.from.split(":")[1]));
-        daysOfWeeks[indx].from = from;
+        daysOfWeeks[indx].from =
+            '${day.from.split(":")[0]}:${day.from.split(":")[1]}';
 
-        TimeOfDay to = TimeOfDay(
-            hour: int.parse(day.to.split(":")[0]),
-            minute: int.parse(day.to.split(":")[1]));
-        daysOfWeeks[indx].to = to;
+        daysOfWeeks[indx].to =
+            '${day.to.split(":")[0]}:${day.to.split(":")[1]}';
       }
     }
 
@@ -83,7 +78,7 @@ class CourtProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setHourDaysOfWeek(int index, TimeOfDay? from, TimeOfDay? to) {
+  void setHourDaysOfWeek(int index, String? from, String? to) {
     if (from != null) {
       daysOfWeeks[index].from = from;
     }
@@ -91,6 +86,7 @@ class CourtProfileProvider extends ChangeNotifier {
     if (to != null) {
       daysOfWeeks[index].to = to;
     }
+    notifyListeners();
   }
 
   bool isValidForm() {
@@ -101,10 +97,10 @@ class CourtProfileProvider extends ChangeNotifier {
     court.userId = userId;
     court.openDays = [];
     for (var day in daysOfWeeks.where((CheckboxOpenDayModel d) => d.value)) {
-      String from = FormatHelper.convertTime(day.from!.hour, day.from!.minute);
-      String to = FormatHelper.convertTime(day.to!.hour, day.to!.minute);
+      // String from = FormatHelper.convertTime(day.from!.hour, day.from!.minute);
+      // String to = FormatHelper.convertTime(day.to!.hour, day.to!.minute);
 
-      final openHour = OpenDayModel(int.parse(day.id), from, to);
+      final openHour = OpenDayModel(int.parse(day.id), day.from, day.to);
       court.openDays!.add(openHour);
     }
 

@@ -1,87 +1,26 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:court_finder/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_picker/flutter_picker.dart';
 
-class OpenDayCheckbox extends StatefulWidget {
+class OpenDayCheckbox extends StatelessWidget {
   const OpenDayCheckbox(
       {Key? key,
-      required this.title,
-      this.checkValue = false,
+      required this.checkValue,
       required this.onCheck,
-      required this.onSelectedHourFrom,
-      required this.onSelectedHourTo,
-      this.initialFrom,
-      this.initialTo})
+      required this.title,
+      required this.initialFrom,
+      required this.initialTo,
+      this.onConfirmFrom,
+      this.onConfirmTo})
       : super(key: key);
-
-  final String title;
   final bool checkValue;
   final Function(bool?) onCheck;
-  final Function(TimeOfDay?) onSelectedHourFrom;
-  final Function(TimeOfDay?) onSelectedHourTo;
-  final TimeOfDay? initialFrom;
-  final TimeOfDay? initialTo;
-
-  @override
-  State<OpenDayCheckbox> createState() => _OpenDayCheckboxState();
-}
-
-class _OpenDayCheckboxState extends State<OpenDayCheckbox> {
-  TimeOfDay _timeFrom = const TimeOfDay(hour: 9, minute: 0);
-  String horaFrom = '';
-  TimeOfDay _timeTo = const TimeOfDay(hour: 21, minute: 0);
-  String horaTo = '';
-
-  @override
-  void initState() {
-    if (widget.initialFrom != null) {
-      _timeFrom = widget.initialFrom!;
-      horaFrom =
-          '${_timeFrom.hour.toString().padLeft(2, '0')}:${_timeFrom.minute.toString().padLeft(2, '0')}';
-    }
-
-    if (widget.initialTo != null) {
-      _timeTo = widget.initialTo!;
-      horaTo =
-          '${_timeTo.hour.toString().padLeft(2, '0')}:${_timeTo.minute.toString().padLeft(2, '0')}';
-    }
-
-    super.initState();
-  }
-
-  void _selectTimeFrom() async {
-    final TimeOfDay? newTime = await showTimePicker(
-      context: context,
-      initialTime: _timeFrom,
-      initialEntryMode: TimePickerEntryMode.dial,
-    );
-    if (newTime != null) {
-      setState(() {
-        _timeFrom = newTime;
-        horaFrom =
-            '${newTime.hour.toString().padLeft(2, '0')}:${newTime.minute.toString().padLeft(2, '0')}';
-
-        widget.onSelectedHourFrom(_timeFrom);
-      });
-    }
-  }
-
-  void _selectTimeTo() async {
-    final TimeOfDay? newTime = await showTimePicker(
-      context: context,
-      initialTime: _timeTo,
-      initialEntryMode: TimePickerEntryMode.dial,
-    );
-    if (newTime != null) {
-      setState(() {
-        _timeTo = newTime;
-        horaTo =
-            '${newTime.hour.toString().padLeft(2, '0')}:${newTime.minute.toString().padLeft(2, '0')}';
-
-        widget.onSelectedHourTo(_timeTo);
-      });
-    }
-  }
+  final String title;
+  final String initialFrom;
+  final String initialTo;
+  final Function(Picker, List<int>)? onConfirmFrom;
+  final Function(Picker, List<int>)? onConfirmTo;
 
   @override
   Widget build(BuildContext context) {
@@ -91,13 +30,13 @@ class _OpenDayCheckboxState extends State<OpenDayCheckbox> {
         SizedBox(
           width: double.infinity,
           child: CheckboxListTile(
-            onChanged: widget.onCheck,
-            value: widget.checkValue,
-            title: Text(widget.title),
+            onChanged: onCheck,
+            value: checkValue,
+            title: Text(title),
           ),
         ),
         const SizedBox(width: 10),
-        if (widget.checkValue)
+        if (checkValue)
           size.width >= 452 ? _builWideContent() : _builNormalContent(),
       ]),
     );
@@ -107,21 +46,18 @@ class _OpenDayCheckboxState extends State<OpenDayCheckbox> {
     return FadeIn(
       child: Row(children: [
         Expanded(
-          child: CustomInput(
-              hintText: 'Abierto Desde',
-              icon: Icons.timer_outlined,
-              initialValue: horaFrom,
-              readOnly: true,
-              onTap: _selectTimeFrom),
+          child: CustomTimepicker(
+            hintText: 'Abierto Desde',
+            initialvalue: initialFrom,
+            onConfirm: onConfirmFrom,
+          ),
         ),
         const SizedBox(width: 10),
         Expanded(
-          child: CustomInput(
+          child: CustomTimepicker(
             hintText: 'Abierto Hasta',
-            icon: Icons.timer_outlined,
-            initialValue: horaTo,
-            readOnly: true,
-            onTap: _selectTimeTo,
+            initialvalue: initialTo,
+            onConfirm: onConfirmTo,
           ),
         )
       ]),
@@ -133,21 +69,18 @@ class _OpenDayCheckboxState extends State<OpenDayCheckbox> {
       child: Column(children: [
         SizedBox(
             width: double.infinity,
-            child: CustomInput(
-                hintText: 'Abierto Desde',
-                icon: Icons.timer_outlined,
-                initialValue: horaFrom,
-                readOnly: true,
-                onTap: _selectTimeFrom)),
+            child: CustomTimepicker(
+              hintText: 'Abierto Desde',
+              initialvalue: initialFrom,
+              onConfirm: onConfirmFrom,
+            )),
         const SizedBox(height: 10),
         SizedBox(
             width: double.infinity,
-            child: CustomInput(
+            child: CustomTimepicker(
               hintText: 'Abierto Hasta',
-              icon: Icons.timer_outlined,
-              initialValue: horaTo,
-              readOnly: true,
-              onTap: _selectTimeTo,
+              initialvalue: initialTo,
+              onConfirm: onConfirmTo,
             ))
       ]),
     );

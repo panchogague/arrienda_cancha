@@ -47,6 +47,8 @@ dependencies:
   firebase_auth: ^3.6.4
   syncfusion_flutter_calendar: ^20.2.45
   universal_io: ^2.0.4
+  flutter_picker: ^2.0.5
+  multi_select_flutter: ^4.1.2
 
 dev_dependencies:
   flutter_test:

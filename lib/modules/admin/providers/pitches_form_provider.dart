@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:court_finder/database/court_db.dart';
 import 'package:court_finder/database/pitch_db.dart';
 import 'package:court_finder/models/models.dart';
+import 'package:court_finder/modules/admin/models/models.dart';
 import 'package:flutter/material.dart';
 
 class PitchesFormProvider extends ChangeNotifier {

@@ -1,18 +1,164 @@
+import 'package:court_finder/helpers/format_helper.dart';
 import 'package:court_finder/models/models.dart';
 import 'package:court_finder/modules/admin/providers/providers.dart';
-import 'package:court_finder/modules/auth/services/auth_services.dart';
+import 'package:court_finder/modules/admin/widgets/widgets.dart';
 import 'package:court_finder/services/services.dart';
 import 'package:court_finder/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_picker/flutter_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
-class PitchForm extends StatelessWidget {
+class PitchForm extends StatefulWidget {
   const PitchForm({Key? key}) : super(key: key);
 
   @override
+  State<PitchForm> createState() => _PitchFormState();
+}
+
+class _PitchFormState extends State<PitchForm> with TickerProviderStateMixin {
+  late TabController tabController;
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(
+      initialIndex: 0,
+      length: 2,
+      vsync: this,
+    );
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final formProvider = Provider.of<PitchesFormProvider>(context);
+
+    return ChangeNotifierProvider(
+      create: (_) => DynamicPriceProvider(),
+      child: Scaffold(
+        appBar: AppBar(
+            title: Text(
+              formProvider.id != null ? 'Editar Cancha' : 'Agregar Cancha',
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            bottom: TabBar(
+              controller: tabController,
+              onTap: (value) => setState(() {
+                tabController.index = value;
+              }),
+              indicatorColor: const Color(0xff264653),
+              tabs: const [
+                Tab(icon: Icon(Icons.sports_soccer_outlined), text: 'General'),
+                Tab(
+                  icon: Icon(Icons.attach_money_outlined),
+                  text: 'Precios Variables',
+                ),
+              ],
+            )),
+        body: TabBarView(
+            controller: tabController, children: const [_General(), _Prices()]),
+        floatingActionButton: tabController.index == 0
+            ? const _FloatingActionButtonTab1()
+            : const _FloatingActionButtonTab2(),
+      ),
+    );
+  }
+}
+
+class _FloatingActionButtonTab1 extends StatelessWidget {
+  const _FloatingActionButtonTab1({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final formProvider = Provider.of<PitchesFormProvider>(context);
+
+    return FloatingActionButton(
+        onPressed: formProvider.isLoading
+            ? null
+            : () async {
+                final pitchService =
+                    Provider.of<PitchService>(context, listen: false);
+                FocusScope.of(context).unfocus();
+                final navigator = Navigator.of(context);
+                if (!formProvider.isValidForm()) return;
+
+                formProvider.isLoading = true;
+                final courtService =
+                    Provider.of<CourtService>(context, listen: false);
+                bool isInsert = formProvider.pitch == null;
+
+                final resp = await formProvider.savePitch(courtService.court!);
+
+                if (isInsert) {
+                  pitchService.refreshGrid();
+                }
+                formProvider.isLoading = false;
+                navigator.pop();
+
+                if (resp != null) {
+                  NotificationService.showSnackbar(resp);
+                } else {
+                  NotificationService.showSnackbar('Datos guardados con éxito');
+                }
+              },
+        child: formProvider.isLoading
+            ? const CircularProgressIndicator(color: Colors.white)
+            : const Icon(Icons.save));
+  }
+}
+
+class _FloatingActionButtonTab2 extends StatelessWidget {
+  const _FloatingActionButtonTab2({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final dynamicPriceProvider = Provider.of<DynamicPriceProvider>(context);
+
+    return FloatingActionButton(
+        onPressed: dynamicPriceProvider.isLoading
+            ? null
+            : () async {
+                FocusScope.of(context).unfocus();
+                final navigator = Navigator.of(context);
+                final formService =
+                    Provider.of<PitchesFormProvider>(context, listen: false);
+                final courtService =
+                    Provider.of<CourtService>(context, listen: false);
+
+                dynamicPriceProvider.isLoading = true;
+
+                //update
+                final resp = await dynamicPriceProvider.saveDynamicPrice(
+                    courtService.court!, formService.pitch!);
+
+                dynamicPriceProvider.isLoading = false;
+                navigator.pop();
+
+                if (resp != null) {
+                  NotificationService.showSnackbar(resp);
+                } else {
+                  NotificationService.showSnackbar('Datos guardados con éxito');
+                }
+              },
+        child: dynamicPriceProvider.isLoading
+            ? const CircularProgressIndicator(color: Colors.white)
+            : const Icon(Icons.save));
+  }
+}
+
+class _General extends StatelessWidget {
+  const _General({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
     final formProvider = Provider.of<PitchesFormProvider>(context);
 
     final Map<String, Widget> form = {
@@ -43,7 +189,7 @@ class PitchForm extends StatelessWidget {
         initialValue: formProvider.price,
         onChanged: (value) => formProvider.price = value,
         keyboardType: TextInputType.number,
-        hintText: 'Precio',
+        hintText: 'Precio general',
         icon: Icons.attach_money_outlined,
       ),
       'tamaño': CustomDropdown(
@@ -85,57 +231,157 @@ class PitchForm extends StatelessWidget {
     };
     return Container(
       color: const Color(0xffF2F2F2),
-      child: Stack(
-        children: [
-          Align(
-            alignment: Alignment.topRight,
-            child: GestureDetector(
-              onTap: () => Navigator.pop(context),
-              child: Container(
-                margin: const EdgeInsets.only(top: 5, right: 5),
-                width: 20,
-                height: 20,
-                decoration: const BoxDecoration(
-                    shape: BoxShape.rectangle, color: Colors.white),
-                child: const Icon(
-                  Icons.close,
-                  size: 18,
-                  color: Colors.grey,
-                ),
-              ),
-            ),
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        child: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          physics: const BouncingScrollPhysics(),
+          child: Form(
+            key: formProvider.formKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            child: LayoutBuilder(builder: (context, constraints) {
+              if (constraints.maxWidth > 600) {
+                return _BuilWideContent(form);
+              } else {
+                return _BuilNormalContent(form);
+              }
+            }),
           ),
-          Container(
-            padding: const EdgeInsets.all(20),
-            child: SingleChildScrollView(
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              physics: const BouncingScrollPhysics(),
-              child: Form(
-                key: formProvider.formKey,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      formProvider.id != null
-                          ? 'Editar Cancha'
-                          : 'Agregar Cancha',
-                      style: const TextStyle(
-                          fontSize: 30, fontWeight: FontWeight.bold),
-                    ),
-                    LayoutBuilder(builder: (context, constraints) {
-                      if (constraints.maxWidth > 600) {
-                        return _BuilWideContent(form);
-                      } else {
-                        return _BuilNormalContent(form);
-                      }
-                    })
-                  ],
-                ),
+        ),
+      ),
+    );
+  }
+}
+
+class _Prices extends StatelessWidget {
+  const _Prices({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final dynamicPriceProvider = Provider.of<DynamicPriceProvider>(context);
+    final courtProvider = Provider.of<CourtService>(context, listen: false);
+
+    if (courtProvider.court != null) {
+      if (courtProvider.court!.openDays != null) {
+        dynamicPriceProvider.loadApplicableDays(courtProvider.court!.openDays!);
+      }
+    }
+    return Center(
+      child: Container(
+        width: 500,
+        color: const Color(0xffF2F2F2),
+        child: ListView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            physics: const BouncingScrollPhysics(),
+            children: [
+              CardPrice(
+                title: 'Hora baja',
+                switchValue: dynamicPriceProvider.isActiveBaja,
+                onSwitchChanged: (value) =>
+                    dynamicPriceProvider.isActiveBaja = value,
+                fromValue: dynamicPriceProvider.fromBaja,
+                toValue: dynamicPriceProvider.toBaja,
+                onConfirmFrom: (Picker picker, List value) {
+                  DateTime? datePicked =
+                      (picker.adapter as DateTimePickerAdapter).value;
+                  if (datePicked != null) {
+                    int hour = datePicked.hour;
+                    int min = datePicked.minute;
+                    dynamicPriceProvider.fromBaja =
+                        FormatHelper.convertTime(hour, min);
+                  }
+                },
+                onConfirmTo: (Picker picker, List value) {
+                  DateTime? datePicked =
+                      (picker.adapter as DateTimePickerAdapter).value;
+                  if (datePicked != null) {
+                    int hour = datePicked.hour;
+                    int min = datePicked.minute;
+                    dynamicPriceProvider.toBaja =
+                        FormatHelper.convertTime(hour, min);
+                  }
+                },
+                priceValue: dynamicPriceProvider.priceBaja,
+                onPriceChanged: (value) =>
+                    dynamicPriceProvider.priceBaja = value,
+                items: dynamicPriceProvider.applicableDays,
+                onConfirmDays: (value) =>
+                    dynamicPriceProvider.applicableDaysBaja = value,
+                initialValueDays: dynamicPriceProvider.applicableDaysBaja,
               ),
-            ),
-          ),
-        ],
+              CardPrice(
+                title: 'Hora Media',
+                switchValue: dynamicPriceProvider.isActiveMedia,
+                onSwitchChanged: (value) =>
+                    dynamicPriceProvider.isActiveMedia = value,
+                fromValue: dynamicPriceProvider.fromMedia,
+                toValue: dynamicPriceProvider.toMedia,
+                onConfirmFrom: (Picker picker, List value) {
+                  DateTime? datePicked =
+                      (picker.adapter as DateTimePickerAdapter).value;
+                  if (datePicked != null) {
+                    int hour = datePicked.hour;
+                    int min = datePicked.minute;
+                    dynamicPriceProvider.fromMedia =
+                        FormatHelper.convertTime(hour, min);
+                  }
+                },
+                onConfirmTo: (Picker picker, List value) {
+                  DateTime? datePicked =
+                      (picker.adapter as DateTimePickerAdapter).value;
+                  if (datePicked != null) {
+                    int hour = datePicked.hour;
+                    int min = datePicked.minute;
+                    dynamicPriceProvider.toMedia =
+                        FormatHelper.convertTime(hour, min);
+                  }
+                },
+                priceValue: dynamicPriceProvider.priceMedia,
+                onPriceChanged: (value) =>
+                    dynamicPriceProvider.priceMedia = value,
+                items: dynamicPriceProvider.applicableDays,
+                onConfirmDays: (value) =>
+                    dynamicPriceProvider.applicableDaysMedia = value,
+                initialValueDays: dynamicPriceProvider.applicableDaysMedia,
+              ),
+              CardPrice(
+                title: 'Hora Alta',
+                switchValue: dynamicPriceProvider.isActiveAlta,
+                onSwitchChanged: (value) =>
+                    dynamicPriceProvider.isActiveAlta = value,
+                fromValue: dynamicPriceProvider.fromAlta,
+                toValue: dynamicPriceProvider.toAlta,
+                onConfirmFrom: (Picker picker, List value) {
+                  DateTime? datePicked =
+                      (picker.adapter as DateTimePickerAdapter).value;
+                  if (datePicked != null) {
+                    int hour = datePicked.hour;
+                    int min = datePicked.minute;
+                    dynamicPriceProvider.fromAlta =
+                        FormatHelper.convertTime(hour, min);
+                  }
+                },
+                onConfirmTo: (Picker picker, List value) {
+                  DateTime? datePicked =
+                      (picker.adapter as DateTimePickerAdapter).value;
+                  if (datePicked != null) {
+                    int hour = datePicked.hour;
+                    int min = datePicked.minute;
+                    dynamicPriceProvider.toAlta =
+                        FormatHelper.convertTime(hour, min);
+                  }
+                },
+                priceValue: dynamicPriceProvider.priceAlta,
+                onPriceChanged: (value) =>
+                    dynamicPriceProvider.priceAlta = value,
+                items: dynamicPriceProvider.applicableDays,
+                onConfirmDays: (value) =>
+                    dynamicPriceProvider.applicableDaysAlta = value,
+                initialValueDays: dynamicPriceProvider.applicableDaysAlta,
+              )
+            ]),
       ),
     );
   }
@@ -166,19 +412,7 @@ class _BuilWideContent extends StatelessWidget {
         Row(
           children: [
             Flexible(
-              child: form['precio']!,
-            ),
-            const SizedBox(width: 20),
-            Flexible(
               child: form['tamaño']!,
-            ),
-          ],
-        ),
-        const SizedBox(height: 30),
-        Row(
-          children: [
-            Flexible(
-              child: form['periodo']!,
             ),
             const SizedBox(width: 20),
             Flexible(
@@ -187,7 +421,8 @@ class _BuilWideContent extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 30),
-        const _SaveButton(),
+        form['periodo']!,
+        const SizedBox(height: 30),
       ],
     );
   }
@@ -205,72 +440,14 @@ class _BuilNormalContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Divider(),
-        const SizedBox(height: 40),
         form['nombre_cancha']!,
-        const SizedBox(width: 20),
         form['categoria']!,
-        const SizedBox(width: 20),
-        form['precio']!,
-        const SizedBox(width: 20),
-        form['tamaño']!,
-        const SizedBox(height: 20),
-        form['periodo']!,
-        const SizedBox(height: 20),
         form['superficie']!,
+        form['tamaño']!,
+        form['periodo']!,
+        form['precio']!,
         const SizedBox(height: 30),
-        const _SaveButton(),
       ],
     );
-  }
-}
-
-class _SaveButton extends StatelessWidget {
-  const _SaveButton({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final formProvider = Provider.of<PitchesFormProvider>(context);
-    final pitchService = Provider.of<PitchService>(context);
-    return MaterialButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        disabledColor: Colors.grey,
-        elevation: 0,
-        color: Theme.of(context).primaryColor,
-        onPressed: formProvider.isLoading
-            ? null
-            : () async {
-                FocusScope.of(context).unfocus();
-                final navigator = Navigator.of(context);
-                if (!formProvider.isValidForm()) return;
-
-                formProvider.isLoading = true;
-                final courtService =
-                    Provider.of<CourtService>(context, listen: false);
-                bool isInsert = formProvider.pitch == null;
-                final resp = await formProvider.savePitch(courtService.court!);
-
-                if (isInsert) {
-                  pitchService.refreshGrid();
-                }
-                //continuar
-
-                formProvider.isLoading = false;
-                navigator.pop();
-
-                if (resp != null) {
-                  NotificationService.showSnackbar(resp);
-                } else {
-                  NotificationService.showSnackbar('Datos guardados con éxito');
-                }
-              },
-        child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 15),
-            child: Text(
-              formProvider.isLoading ? 'Guardando...' : 'Guardar',
-              style: const TextStyle(color: Colors.white),
-            )));
   }
 }

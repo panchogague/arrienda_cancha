@@ -1,4 +1,5 @@
 import 'package:court_finder/helpers/format_helper.dart';
+import 'package:court_finder/modules/admin/models/dynamic_price_model.dart';
 
 class PitchModel {
   String? id;
@@ -9,6 +10,7 @@ class PitchModel {
   int period;
   String? categoryId;
   String? category;
+  List<DynamicPriceModel>? dynamicPrices;
 
   get priceFormated => FormatHelper.priceFormated(price);
 
@@ -22,7 +24,8 @@ class PitchModel {
       required this.period,
       this.categoryId,
       this.category,
-      this.id});
+      this.id,
+      this.dynamicPrices});
 
   Map<String, dynamic> toMap() => {
         "name": name,
@@ -32,6 +35,9 @@ class PitchModel {
         "period": period,
         "categoryId": categoryId,
         "category": category,
+        "dynamicPrices": dynamicPrices != null
+            ? dynamicPrices!.map((e) => e.toMap()).toList()
+            : null,
       };
 
   factory PitchModel.fromFireBase(Map<dynamic, dynamic> json, String key) =>

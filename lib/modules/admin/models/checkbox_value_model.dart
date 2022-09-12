@@ -1,6 +1,6 @@
 class CheckboxValueModel {
   String name;
-  bool value = false;
+  bool value;
   String id;
-  CheckboxValueModel(this.name, {this.id = ''});
+  CheckboxValueModel(this.name, {this.id = '', this.value = false});
 }

@@ -1,6 +1,5 @@
 import 'package:court_finder/modules/admin/providers/providers.dart';
 import 'package:court_finder/modules/admin/widgets/widgets.dart';
-import 'package:court_finder/modules/auth/services/auth_services.dart';
 import 'package:court_finder/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

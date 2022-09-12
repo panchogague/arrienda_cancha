@@ -1,7 +1,9 @@
+import 'package:court_finder/helpers/format_helper.dart';
 import 'package:court_finder/modules/admin/providers/providers.dart';
 import 'package:court_finder/modules/admin/widgets/widgets.dart';
 import 'package:court_finder/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_picker/flutter_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -131,10 +133,26 @@ class _OpenDays extends StatelessWidget {
               initialFrom: courtForm.daysOfWeeks[i].from,
               initialTo: courtForm.daysOfWeeks[i].to,
               onCheck: (value) => courtForm.checkDaysOfWeek(i),
-              onSelectedHourFrom: (value) =>
-                  courtForm.setHourDaysOfWeek(i, value, null),
-              onSelectedHourTo: (value) =>
-                  courtForm.setHourDaysOfWeek(i, null, value),
+              onConfirmFrom: (Picker picker, List value) {
+                DateTime? datePicked =
+                    (picker.adapter as DateTimePickerAdapter).value;
+                if (datePicked != null) {
+                  int hour = datePicked.hour;
+                  int minutes = datePicked.minute;
+                  courtForm.setHourDaysOfWeek(
+                      i, FormatHelper.convertTime(hour, minutes), null);
+                }
+              },
+              onConfirmTo: (Picker picker, List value) {
+                DateTime? datePicked =
+                    (picker.adapter as DateTimePickerAdapter).value;
+                if (datePicked != null) {
+                  int hour = datePicked.hour;
+                  int minutes = datePicked.minute;
+                  courtForm.setHourDaysOfWeek(
+                      i, null, FormatHelper.convertTime(hour, minutes));
+                }
+              },
             ),
             separatorBuilder: (_, __) => const Divider(),
           )
