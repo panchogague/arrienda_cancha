@@ -55,6 +55,11 @@ class MyApp extends StatelessWidget {
           update: (context, cat, pitch) => PitchesFormProvider(cat.categories),
         ),
 
+        ChangeNotifierProxyProvider<PitchesFormProvider, DynamicPriceProvider>(
+          create: (context) => DynamicPriceProvider(null),
+          update: (context, form, price) => DynamicPriceProvider(form.pitch),
+        ),
+
         // ChangeNotifierProvider(create: (_) => PitchesFormProvider())
       ],
       child: MaterialApp(

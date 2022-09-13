@@ -50,5 +50,10 @@ class PitchModel {
         size: json["size"],
         surface: json["surface"],
         id: key,
+        dynamicPrices: json.containsKey("dynamicPrices")
+            ? List.from(json['dynamicPrices'])
+                .map((e) => DynamicPriceModel.fromMap(e))
+                .toList()
+            : null,
       );
 }

@@ -1,25 +1,72 @@
 import 'package:court_finder/database/pitch_db.dart';
+import 'package:court_finder/helpers/format_helper.dart';
 import 'package:court_finder/models/models.dart';
 import 'package:court_finder/modules/admin/models/models.dart';
 import 'package:flutter/material.dart';
 
 class DynamicPriceProvider extends ChangeNotifier {
-  List<CheckboxValueModel> applicableDays = [];
+  List<String> applicableDays = [];
+
+  PitchModel? pitch;
+
+  DynamicPriceProvider(this.pitch) {
+    if (pitch != null) {
+      if (pitch!.dynamicPrices != null) {
+        final horaBaja = pitch!.dynamicPrices!
+            .firstWhere((e) => e.type == TypePrice.horaBaja.name);
+        final horaMedia = pitch!.dynamicPrices!
+            .firstWhere((e) => e.type == TypePrice.horaMedia.name);
+        final horaAlta = pitch!.dynamicPrices!
+            .firstWhere((e) => e.type == TypePrice.horaAlta.name);
+
+        _isActiveBaja = horaBaja.isActive;
+        priceBaja = horaBaja.price != null ? horaBaja.price.toString() : '';
+        _fromBaja = horaBaja.from;
+        _toBaja = horaBaja.to;
+        applicableDaysBaja = horaBaja.applicableDays
+            .map((e) => FormatHelper.dayOfWeek(int.parse(e)))
+            .toList();
+
+        _isActiveMedia = horaMedia.isActive;
+        priceMedia = horaMedia.price != null ? horaMedia.price.toString() : '';
+        _fromMedia = horaMedia.from;
+        _toMedia = horaMedia.to;
+        applicableDaysMedia = horaMedia.applicableDays
+            .map((e) => FormatHelper.dayOfWeek(int.parse(e)))
+            .toList();
+
+        _isActiveAlta = horaAlta.isActive;
+        priceAlta = horaAlta.price != null ? horaAlta.price.toString() : '';
+        _fromAlta = horaAlta.from;
+        _toAlta = horaAlta.to;
+        applicableDaysAlta = horaAlta.applicableDays
+            .map((e) => FormatHelper.dayOfWeek(int.parse(e)))
+            .toList();
+      }
+    } else {
+      //TODO:clean form
+    }
+  }
 
   void loadApplicableDays(List<OpenDayModel> openDays) {
     if (applicableDays.isEmpty) {
-      applicableDays.addAll(openDays.map((e) =>
-          CheckboxValueModel(e.dayName, id: e.dayId.toString(), value: false)));
-      applicableDaysBaja = applicableDays;
-      applicableDaysMedia = applicableDays;
-      applicableDaysAlta = applicableDays;
+      applicableDays.addAll(openDays.map((e) => e.dayName));
+      if (applicableDaysBaja.isEmpty) {
+        applicableDaysBaja = applicableDays;
+      }
+      if (applicableDaysMedia.isEmpty) {
+        applicableDaysMedia = applicableDays;
+      }
+      if (applicableDaysAlta.isEmpty) {
+        applicableDaysAlta = applicableDays;
+      }
     }
   }
 
   //Hora baja
   bool _isActiveBaja = false;
   String priceBaja = '';
-  List<CheckboxValueModel> applicableDaysBaja = [];
+  List<String> applicableDaysBaja = [];
   String _fromBaja = '';
   String _toBaja = '';
 
@@ -54,7 +101,7 @@ class DynamicPriceProvider extends ChangeNotifier {
   //Hora Media
   bool _isActiveMedia = false;
   String priceMedia = '';
-  List<CheckboxValueModel> applicableDaysMedia = [];
+  List<String> applicableDaysMedia = [];
   String _fromMedia = '';
   String _toMedia = '';
 
@@ -82,7 +129,7 @@ class DynamicPriceProvider extends ChangeNotifier {
   //Hora Alta
   bool _isActiveAlta = false;
   String priceAlta = '';
-  List<CheckboxValueModel> applicableDaysAlta = [];
+  List<String> applicableDaysAlta = [];
   String _fromAlta = '';
   String _toAlta = '';
 
@@ -107,34 +154,42 @@ class DynamicPriceProvider extends ChangeNotifier {
 
   String get toAlta => _toAlta;
 
-  Future<String?> saveDynamicPrice(CourtModel court, PitchModel pitch) async {
+  Future<String?> saveDynamicPrice(CourtModel court) async {
     //TODO:validar
-    final List<DynamicPriceModel> model = [
-      DynamicPriceModel(
-          type: TypePrice.horaBaja.name,
-          applicableDays: applicableDaysBaja.map((e) => e.id).toList(),
-          price: priceBaja.isNotEmpty ? int.parse(priceBaja) : null,
-          from: fromBaja,
-          to: toBaja,
-          isActive: isActiveBaja),
-      DynamicPriceModel(
-          type: TypePrice.horaMedia.name,
-          applicableDays: applicableDaysMedia.map((e) => e.id).toList(),
-          price: priceMedia.isNotEmpty ? int.parse(priceMedia) : null,
-          from: fromMedia,
-          to: toMedia,
-          isActive: isActiveMedia),
-      DynamicPriceModel(
-          type: TypePrice.horaAlta.name,
-          applicableDays: applicableDaysAlta.map((e) => e.id).toList(),
-          price: priceAlta.isNotEmpty ? int.parse(priceAlta) : null,
-          from: fromAlta,
-          to: toAlta,
-          isActive: isActiveAlta)
-    ];
+    if (pitch != null) {
+      final List<DynamicPriceModel> model = [
+        DynamicPriceModel(
+            type: TypePrice.horaBaja.name,
+            applicableDays: applicableDaysBaja
+                .map((e) => FormatHelper.dayOfWeekId(e))
+                .toList(),
+            price: priceBaja.isNotEmpty ? int.parse(priceBaja) : null,
+            from: fromBaja,
+            to: toBaja,
+            isActive: isActiveBaja),
+        DynamicPriceModel(
+            type: TypePrice.horaMedia.name,
+            applicableDays: applicableDaysMedia
+                .map((e) => FormatHelper.dayOfWeekId(e))
+                .toList(),
+            price: priceMedia.isNotEmpty ? int.parse(priceMedia) : null,
+            from: fromMedia,
+            to: toMedia,
+            isActive: isActiveMedia),
+        DynamicPriceModel(
+            type: TypePrice.horaAlta.name,
+            applicableDays: applicableDaysAlta
+                .map((e) => FormatHelper.dayOfWeekId(e))
+                .toList(),
+            price: priceAlta.isNotEmpty ? int.parse(priceAlta) : null,
+            from: fromAlta,
+            to: toAlta,
+            isActive: isActiveAlta)
+      ];
 
-    pitch.dynamicPrices = model;
-    String? resp = await PitchDB().createOrUpdatePitch(court.id!, pitch);
-    return resp;
+      pitch!.dynamicPrices = model;
+      String? resp = await PitchDB().createOrUpdatePitch(court.id!, pitch!);
+      return resp;
+    }
   }
 }

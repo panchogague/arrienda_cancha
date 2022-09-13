@@ -32,21 +32,12 @@ class CardPrice extends StatelessWidget {
   final Function(Picker, List<int>)? onConfirmTo;
   final String priceValue;
   final Function(String)? onPriceChanged;
-  final List<CheckboxValueModel> items;
-  final Function(List<CheckboxValueModel>) onConfirmDays;
-  final List<CheckboxValueModel> initialValueDays;
+  final List<String> items;
+  final Function(List<String>) onConfirmDays;
+  final List<String> initialValueDays;
 
   @override
   Widget build(BuildContext context) {
-    final courtProvider = Provider.of<CourtService>(context, listen: false);
-    List<String> dias = ['Todos los días'];
-    if (courtProvider.court != null) {
-      if (courtProvider.court!.openDays != null) {
-        dias.addAll(
-            courtProvider.court!.openDays!.map((e) => e.dayName).toList());
-      }
-    }
-
     return Card(
         elevation: 1,
         clipBehavior: Clip.antiAlias,
@@ -89,7 +80,7 @@ class CardPrice extends StatelessWidget {
                     style: Theme.of(context).textTheme.headline4),
                 buttonIcon: Icon(Icons.calendar_today_rounded,
                     color: Theme.of(context).primaryColor),
-                items: items.map((e) => MultiSelectItem(e, e.name)).toList(),
+                items: items.map((e) => MultiSelectItem(e, e)).toList(),
                 initialValue: initialValueDays,
                 listType: MultiSelectListType.CHIP,
                 onConfirm: onConfirmDays,

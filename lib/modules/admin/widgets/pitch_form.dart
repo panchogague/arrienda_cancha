@@ -38,34 +38,31 @@ class _PitchFormState extends State<PitchForm> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final formProvider = Provider.of<PitchesFormProvider>(context);
 
-    return ChangeNotifierProvider(
-      create: (_) => DynamicPriceProvider(),
-      child: Scaffold(
-        appBar: AppBar(
-            title: Text(
-              formProvider.id != null ? 'Editar Cancha' : 'Agregar Cancha',
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            bottom: TabBar(
-              controller: tabController,
-              onTap: (value) => setState(() {
-                tabController.index = value;
-              }),
-              indicatorColor: const Color(0xff264653),
-              tabs: const [
-                Tab(icon: Icon(Icons.sports_soccer_outlined), text: 'General'),
-                Tab(
-                  icon: Icon(Icons.attach_money_outlined),
-                  text: 'Precios Variables',
-                ),
-              ],
-            )),
-        body: TabBarView(
-            controller: tabController, children: const [_General(), _Prices()]),
-        floatingActionButton: tabController.index == 0
-            ? const _FloatingActionButtonTab1()
-            : const _FloatingActionButtonTab2(),
-      ),
+    return Scaffold(
+      appBar: AppBar(
+          title: Text(
+            formProvider.id != null ? 'Editar Cancha' : 'Agregar Cancha',
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          bottom: TabBar(
+            controller: tabController,
+            onTap: (value) => setState(() {
+              tabController.index = value;
+            }),
+            indicatorColor: const Color(0xff264653),
+            tabs: const [
+              Tab(icon: Icon(Icons.sports_soccer_outlined), text: 'General'),
+              Tab(
+                icon: Icon(Icons.attach_money_outlined),
+                text: 'Precios Variables',
+              ),
+            ],
+          )),
+      body: TabBarView(
+          controller: tabController, children: const [_General(), _Prices()]),
+      floatingActionButton: tabController.index == 0
+          ? const _FloatingActionButtonTab1()
+          : const _FloatingActionButtonTab2(),
     );
   }
 }
@@ -86,7 +83,9 @@ class _FloatingActionButtonTab1 extends StatelessWidget {
                 final pitchService =
                     Provider.of<PitchService>(context, listen: false);
                 FocusScope.of(context).unfocus();
-                final navigator = Navigator.of(context);
+
+                final scaffold = ScaffoldMessenger.of(context);
+
                 if (!formProvider.isValidForm()) return;
 
                 formProvider.isLoading = true;
@@ -100,12 +99,12 @@ class _FloatingActionButtonTab1 extends StatelessWidget {
                   pitchService.refreshGrid();
                 }
                 formProvider.isLoading = false;
-                navigator.pop();
 
                 if (resp != null) {
-                  NotificationService.showSnackbar(resp);
+                  NotificationService.showSnackbar(resp, scaffold: scaffold);
                 } else {
-                  NotificationService.showSnackbar('Datos guardados con éxito');
+                  NotificationService.showSnackbar('Datos guardados con éxito',
+                      scaffold: scaffold);
                 }
               },
         child: formProvider.isLoading
@@ -124,21 +123,22 @@ class _FloatingActionButtonTab2 extends StatelessWidget {
     final dynamicPriceProvider = Provider.of<DynamicPriceProvider>(context);
 
     return FloatingActionButton(
-        onPressed: dynamicPriceProvider.isLoading
+        backgroundColor: dynamicPriceProvider.pitch == null
+            ? Colors.grey[400]
+            : Theme.of(context).primaryColor,
+        onPressed: dynamicPriceProvider.isLoading ||
+                dynamicPriceProvider.pitch == null
             ? null
             : () async {
                 FocusScope.of(context).unfocus();
                 final navigator = Navigator.of(context);
-                final formService =
-                    Provider.of<PitchesFormProvider>(context, listen: false);
                 final courtService =
                     Provider.of<CourtService>(context, listen: false);
 
                 dynamicPriceProvider.isLoading = true;
 
-                //update
-                final resp = await dynamicPriceProvider.saveDynamicPrice(
-                    courtService.court!, formService.pitch!);
+                final resp = await dynamicPriceProvider
+                    .saveDynamicPrice(courtService.court!);
 
                 dynamicPriceProvider.isLoading = false;
                 navigator.pop();

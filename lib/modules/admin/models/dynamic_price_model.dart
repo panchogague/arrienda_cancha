@@ -24,4 +24,18 @@ class DynamicPriceModel {
         "from": from,
         "to": to,
       };
+
+  factory DynamicPriceModel.fromMap(
+          Map<String, dynamic> json) =>
+      DynamicPriceModel(
+          isActive: json['isActive'],
+          price: json['price'],
+          to: json['to'],
+          from: json['from'],
+          applicableDays: json.containsKey('applicableDays')
+              ? (json['applicableDays'] as List)
+                  .map((e) => e as String)
+                  .toList()
+              : [],
+          type: json['type']);
 }
