@@ -36,34 +36,61 @@ class _PitchFormState extends State<PitchForm> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final formProvider = Provider.of<PitchesFormProvider>(context);
-
-    return Scaffold(
-      appBar: AppBar(
-          title: Text(
-            formProvider.id != null ? 'Editar Cancha' : 'Agregar Cancha',
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+    return LayoutBuilder(builder: (context, constraints) {
+      if (constraints.maxWidth < 600) {
+        return Scaffold(
+          appBar: AppBar(
+              title: const _Title(),
+              bottom: TabBar(
+                controller: tabController,
+                onTap: (value) => setState(() {
+                  tabController.index = value;
+                }),
+                indicatorColor: const Color(0xff264653),
+                tabs: const [
+                  Tab(
+                      icon: Icon(Icons.sports_soccer_outlined),
+                      text: 'General'),
+                  Tab(
+                    icon: Icon(Icons.attach_money_outlined),
+                    text: 'Precios Variables',
+                  ),
+                ],
+              )),
+          body: TabBarView(
+              controller: tabController,
+              children: const [_General(), _Prices()]),
+          floatingActionButton: tabController.index == 0
+              ? const _FloatingActionButtonTab1()
+              : const _FloatingActionButtonTab2(),
+        );
+      } else {
+        return Scaffold(
+          appBar: AppBar(
+            title: const _Title(),
           ),
-          bottom: TabBar(
-            controller: tabController,
-            onTap: (value) => setState(() {
-              tabController.index = value;
-            }),
-            indicatorColor: const Color(0xff264653),
-            tabs: const [
-              Tab(icon: Icon(Icons.sports_soccer_outlined), text: 'General'),
-              Tab(
-                icon: Icon(Icons.attach_money_outlined),
-                text: 'Precios Variables',
-              ),
-            ],
-          )),
-      body: TabBarView(
-          controller: tabController, children: const [_General(), _Prices()]),
-      floatingActionButton: tabController.index == 0
-          ? const _FloatingActionButtonTab1()
-          : const _FloatingActionButtonTab2(),
-    );
+          body: _General(
+              tab2: Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                          color: const Color(0xff264653).withOpacity(0.2))),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text('Precios Variables'),
+                        SizedBox(height: 10),
+                        _Prices(
+                          isShrinkWrap: true,
+                          color: Colors.white,
+                        )
+                      ]))),
+          floatingActionButton: const _FloatingActionButtonTab1(),
+        );
+      }
+    });
   }
 }
 
@@ -156,7 +183,8 @@ class _FloatingActionButtonTab2 extends StatelessWidget {
 }
 
 class _General extends StatelessWidget {
-  const _General({Key? key}) : super(key: key);
+  const _General({Key? key, this.tab2}) : super(key: key);
+  final Widget? tab2;
   @override
   Widget build(BuildContext context) {
     final formProvider = Provider.of<PitchesFormProvider>(context);
@@ -241,7 +269,7 @@ class _General extends StatelessWidget {
             autovalidateMode: AutovalidateMode.onUserInteraction,
             child: LayoutBuilder(builder: (context, constraints) {
               if (constraints.maxWidth > 600) {
-                return _BuilWideContent(form);
+                return _BuilWideContent(form, tab2!);
               } else {
                 return _BuilNormalContent(form);
               }
@@ -256,7 +284,12 @@ class _General extends StatelessWidget {
 class _Prices extends StatelessWidget {
   const _Prices({
     Key? key,
+    this.isShrinkWrap = false,
+    this.color = const Color(0xffF2F2F2),
   }) : super(key: key);
+
+  final bool isShrinkWrap;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -270,11 +303,11 @@ class _Prices extends StatelessWidget {
     }
     return Center(
       child: Container(
-        width: 500,
-        color: const Color(0xffF2F2F2),
+        color: color,
         child: ListView(
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             physics: const BouncingScrollPhysics(),
+            shrinkWrap: isShrinkWrap,
             children: [
               CardPrice(
                 title: 'Hora baja',
@@ -388,12 +421,10 @@ class _Prices extends StatelessWidget {
 }
 
 class _BuilWideContent extends StatelessWidget {
-  const _BuilWideContent(
-    this.form, {
-    Key? key,
-  }) : super(key: key);
+  const _BuilWideContent(this.form, this.tab2, {Key? key}) : super(key: key);
 
   final Map<String, Widget> form;
+  final Widget tab2;
 
   @override
   Widget build(BuildContext context) {
@@ -423,6 +454,7 @@ class _BuilWideContent extends StatelessWidget {
         const SizedBox(height: 30),
         form['periodo']!,
         const SizedBox(height: 30),
+        tab2
       ],
     );
   }
@@ -448,6 +480,21 @@ class _BuilNormalContent extends StatelessWidget {
         form['precio']!,
         const SizedBox(height: 30),
       ],
+    );
+  }
+}
+
+class _Title extends StatelessWidget {
+  const _Title({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final formProvider = Provider.of<PitchesFormProvider>(context);
+    return Text(
+      formProvider.id != null ? 'Editar Cancha' : 'Agregar Cancha',
+      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
     );
   }
 }

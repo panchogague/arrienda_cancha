@@ -190,6 +190,8 @@ class DynamicPriceProvider extends ChangeNotifier {
       pitch!.dynamicPrices = model;
       String? resp = await PitchDB().createOrUpdatePitch(court.id!, pitch!);
       return resp;
+    } else {
+      return 'error'; //TODO:mejorar esto
     }
   }
 }

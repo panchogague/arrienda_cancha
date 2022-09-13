@@ -2,7 +2,6 @@ import 'package:court_finder/helpers/show_alert_helper.dart';
 import 'package:court_finder/models/models.dart';
 import 'package:court_finder/modules/admin/providers/providers.dart';
 import 'package:court_finder/modules/admin/widgets/widgets.dart';
-import 'package:court_finder/modules/auth/services/services.dart';
 import 'package:court_finder/modules/user/widgets/widgets.dart';
 import 'package:court_finder/services/services.dart';
 import 'package:flutter/material.dart';
