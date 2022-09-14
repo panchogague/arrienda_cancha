@@ -87,7 +87,8 @@ class _PitchFormState extends State<PitchForm> with TickerProviderStateMixin {
                           color: Colors.white,
                         )
                       ]))),
-          floatingActionButton: const _FloatingActionButtonTab1(),
+          floatingActionButton:
+              const _FloatingActionButtonTab1(includeTab2Logic: true),
         );
       }
     });
@@ -95,9 +96,10 @@ class _PitchFormState extends State<PitchForm> with TickerProviderStateMixin {
 }
 
 class _FloatingActionButtonTab1 extends StatelessWidget {
-  const _FloatingActionButtonTab1({
-    Key? key,
-  }) : super(key: key);
+  const _FloatingActionButtonTab1({Key? key, this.includeTab2Logic = false})
+      : super(key: key);
+
+  final bool includeTab2Logic;
 
   @override
   Widget build(BuildContext context) {
@@ -109,9 +111,13 @@ class _FloatingActionButtonTab1 extends StatelessWidget {
             : () async {
                 final pitchService =
                     Provider.of<PitchService>(context, listen: false);
-                FocusScope.of(context).unfocus();
 
                 final scaffold = ScaffoldMessenger.of(context);
+                final dynamicPriceProvider =
+                    Provider.of<DynamicPriceProvider>(context, listen: false);
+
+                FocusScope.of(context).unfocus();
+                final navigator = Navigator.of(context);
 
                 if (!formProvider.isValidForm()) return;
 
@@ -120,19 +126,35 @@ class _FloatingActionButtonTab1 extends StatelessWidget {
                     Provider.of<CourtService>(context, listen: false);
                 bool isInsert = formProvider.pitch == null;
 
-                final resp = await formProvider.savePitch(courtService.court!);
+                String? resp =
+                    await formProvider.savePitch(courtService.court!);
+
+                if (resp != null) {
+                  NotificationService.showSnackbar(resp, scaffold: scaffold);
+                } else {
+                  if (includeTab2Logic) {
+                    resp = await dynamicPriceProvider.saveDynamicPrice(
+                        courtService.court!, formProvider.pitch);
+                    if (resp != null) {
+                      NotificationService.showSnackbar(resp,
+                          scaffold: scaffold);
+                    } else {
+                      NotificationService.showSnackbar(
+                        'Datos guardados con éxito',
+                      );
+                      navigator.pop();
+                    }
+                  } else {
+                    NotificationService.showSnackbar(
+                        'Datos guardados con éxito',
+                        scaffold: scaffold);
+                  }
+                }
 
                 if (isInsert) {
                   pitchService.refreshGrid();
                 }
                 formProvider.isLoading = false;
-
-                if (resp != null) {
-                  NotificationService.showSnackbar(resp, scaffold: scaffold);
-                } else {
-                  NotificationService.showSnackbar('Datos guardados con éxito',
-                      scaffold: scaffold);
-                }
               },
         child: formProvider.isLoading
             ? const CircularProgressIndicator(color: Colors.white)
@@ -164,8 +186,8 @@ class _FloatingActionButtonTab2 extends StatelessWidget {
 
                 dynamicPriceProvider.isLoading = true;
 
-                final resp = await dynamicPriceProvider
-                    .saveDynamicPrice(courtService.court!);
+                final resp = await dynamicPriceProvider.saveDynamicPrice(
+                    courtService.court!, null);
 
                 dynamicPriceProvider.isLoading = false;
                 navigator.pop();
@@ -442,17 +464,19 @@ class _BuilWideContent extends StatelessWidget {
         const SizedBox(height: 30),
         Row(
           children: [
-            Flexible(
-              child: form['tamaño']!,
-            ),
+            Flexible(child: form['tamaño']!),
             const SizedBox(width: 20),
-            Flexible(
-              child: form['superficie']!,
-            ),
+            Flexible(child: form['superficie']!),
           ],
         ),
         const SizedBox(height: 30),
-        form['periodo']!,
+        Row(
+          children: [
+            Flexible(child: form['periodo']!),
+            const SizedBox(width: 20),
+            Flexible(child: form['precio']!),
+          ],
+        ),
         const SizedBox(height: 30),
         tab2
       ],

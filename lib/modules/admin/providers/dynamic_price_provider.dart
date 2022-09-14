@@ -154,8 +154,14 @@ class DynamicPriceProvider extends ChangeNotifier {
 
   String get toAlta => _toAlta;
 
-  Future<String?> saveDynamicPrice(CourtModel court) async {
+  Future<String?> saveDynamicPrice(
+      CourtModel court, PitchModel? pitchTab1) async {
     //TODO:validar
+
+    if (pitchTab1 != null) {
+      pitch = pitchTab1; //Solucion parche cuando se utiliza 1 tab
+    }
+
     if (pitch != null) {
       final List<DynamicPriceModel> model = [
         DynamicPriceModel(
