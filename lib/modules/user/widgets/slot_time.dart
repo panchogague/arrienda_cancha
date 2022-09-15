@@ -21,6 +21,7 @@ class SlotTime extends StatelessWidget {
   Widget build(BuildContext context) {
     final pickerProvider = Provider.of<PickerSlotProvider>(context);
 
+    final bookingProvider = Provider.of<BookingProvider>(context);
     //TODO:refactorizar código
 
     bool isAvailable = slotHours.isAvailable;
@@ -43,9 +44,6 @@ class SlotTime extends StatelessWidget {
         if (!isAvailable) return;
 
         pickerProvider.selectedIndex = index;
-
-        final bookingProvider =
-            Provider.of<BookingProvider>(context, listen: false);
         bookingProvider.slot = slotHours;
       },
       child: Container(

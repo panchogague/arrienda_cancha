@@ -17,10 +17,12 @@ class _DatePickerHorizontalState extends State<DatePickerHorizontal> {
 
   @override
   Widget build(BuildContext context) {
-    final bookingProvider = Provider.of<BookingProvider>(context);
+    final bookingProvider =
+        Provider.of<BookingProvider>(context, listen: false);
     DateTime now = bookingProvider.selectedDate;
     DateTime startDate = now;
     DateTime endDate = now.add(const Duration(days: 14));
+
     return Container(
       color: Colors.grey,
       alignment: Alignment.center,
@@ -33,9 +35,9 @@ class _DatePickerHorizontalState extends State<DatePickerHorizontal> {
         datePickerController: _datePickerController,
         selectedColor: myTheme.primaryColor,
         onValueSelected: (date) {
-          final courtProvider =
-              Provider.of<CourtProvider>(context, listen: false);
-          courtProvider.dateSelected = date;
+          final pickerProvider =
+              Provider.of<PickerSlotProvider>(context, listen: false);
+          pickerProvider.dateSelected = date;
           bookingProvider.selectedDate = date;
         },
       ),

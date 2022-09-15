@@ -28,6 +28,7 @@ class BookingProvider extends ChangeNotifier {
   set slot(value) {
     _slot = value;
     slotAnimationController?.forward(from: 0.0);
+    priceAnimationController?.forward(from: 0.0);
     notifyListeners();
   }
 

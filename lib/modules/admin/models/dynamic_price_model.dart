@@ -1,3 +1,5 @@
+import 'package:court_finder/helpers/format_helper.dart';
+
 enum TypePrice { horaBaja, horaMedia, horaAlta }
 
 class DynamicPriceModel {
@@ -38,4 +40,7 @@ class DynamicPriceModel {
                   .toList()
               : [],
           type: json['type']);
+
+  double get fromToDouble => FormatHelper.convertHourStringToDouble(from);
+  double get toToDouble => FormatHelper.convertHourStringToDouble(to);
 }

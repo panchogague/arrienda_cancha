@@ -11,8 +11,10 @@ class PitchModel {
   String? categoryId;
   String? category;
   List<DynamicPriceModel>? dynamicPrices;
+  int? priceDynamic;
 
   get priceFormated => FormatHelper.priceFormated(price);
+  get priceDynamiFormated => FormatHelper.priceFormated(priceDynamic);
 
   get periodFormated => FormatHelper.periodFormated(period);
 

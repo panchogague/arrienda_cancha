@@ -1,3 +1,4 @@
+import 'package:court_finder/modules/user/providers/providers.dart';
 import 'package:court_finder/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -79,7 +80,14 @@ class _CategoryCard extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, 'search', arguments: category),
+      onTap: () {
+        final courtService = Provider.of<CourtService>(context, listen: false);
+        Provider.of<CourtProvider>(context, listen: false).categoryIdSelected =
+            category.id!;
+
+        courtService.populateCourtsByCategory(category.id!);
+        Navigator.pushNamed(context, 'search', arguments: category);
+      },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 8),
         child: Stack(

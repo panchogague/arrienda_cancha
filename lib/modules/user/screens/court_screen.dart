@@ -1,3 +1,4 @@
+import 'package:court_finder/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -16,13 +17,15 @@ class CourtScreen extends StatelessWidget {
     final CourtModel court =
         ModalRoute.of(context)!.settings.arguments as CourtModel;
 
-    final courtProvider = Provider.of<CourtProvider>(context);
+    final courtProvider = Provider.of<CourtProvider>(context, listen: false);
 
     if (courtProvider.courtSelected != null &&
         courtProvider.courtSelected?.id != court.id) {
       cleanProviders(context);
     }
     courtProvider.courtSelected = court;
+    Provider.of<PickerSlotProvider>(context, listen: false).courtSelected =
+        court;
 
     return Scaffold(
       body: Stack(
@@ -136,7 +139,11 @@ class _Booking extends StatelessWidget {
                               ElasticIn(
                                 controller: (p0) => bookingProvider
                                     .priceAnimationController = p0,
-                                child: Text(bookingProvider.pitch.priceFormated,
+                                child: Text(
+                                    bookingProvider.pitch.priceDynamic != null
+                                        ? bookingProvider
+                                            .pitch.priceDynamiFormated
+                                        : bookingProvider.pitch.priceFormated,
                                     style: const TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w800,
@@ -256,7 +263,8 @@ class _Information extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final court = Provider.of<CourtProvider>(context).courtSelected;
+    final court =
+        Provider.of<CourtProvider>(context, listen: false).courtSelected;
     return Container(
       width: double.infinity,
       color: const Color(0xffF0EEEF),
@@ -347,6 +355,8 @@ class _FacilitiesInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final courtProvider = Provider.of<CourtProvider>(context, listen: false);
+    final facilities = courtProvider.getFacilities();
     return Container(
       margin: const EdgeInsets.all(10),
       child: Column(
@@ -364,27 +374,12 @@ class _FacilitiesInfo extends StatelessWidget {
             height: 120,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: ListView(
+              child: ListView.builder(
                 physics: const BouncingScrollPhysics(),
                 scrollDirection: Axis.horizontal,
-                children: const [
-                  FacilityCard(
-                    icon: FontAwesomeIcons.toilet,
-                    title: 'Baños',
-                  ),
-                  FacilityCard(
-                    icon: Icons.shower,
-                    title: 'Duchas',
-                  ),
-                  FacilityCard(
-                    icon: FontAwesomeIcons.shop,
-                    title: 'Kiosco',
-                  ),
-                  FacilityCard(
-                    icon: FontAwesomeIcons.wheelchair,
-                    title: 'Accesso',
-                  ),
-                ],
+                itemCount: facilities.length,
+                itemBuilder: (_, int i) => FacilityCard(
+                    icon: facilities[i].icon, title: facilities[i].name),
               ),
             ),
           )
@@ -429,56 +424,17 @@ class _PitchPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final pitches = Provider.of<CourtProvider>(context).courtSelected!.pitches;
     return SizedBox(
       height: 100,
-      child: ListView(
+      child: ListView.builder(
         physics: const BouncingScrollPhysics(),
         scrollDirection: Axis.horizontal,
-        children: [
-          SlotPitch(
-            pitch: PitchModel(
-                name: 'Cancha 1',
-                price: 4500,
-                size: '12 Jugadores',
-                surface: 'Sintético',
-                period: 30),
-            index: 1,
-          ),
-          SlotPitch(
-            pitch: PitchModel(
-                name: 'Cancha 2',
-                price: 12400,
-                size: '12 Jugadores',
-                surface: 'Sintético',
-                period: 30),
-            index: 2,
-          ),
-          SlotPitch(
-              pitch: PitchModel(
-                  name: 'Cancha Pasto',
-                  price: 35000,
-                  size: '22 Jugadores',
-                  surface: 'Pasto',
-                  period: 30),
-              index: 3),
-          SlotPitch(
-              pitch: PitchModel(
-                  name: 'Cancha Pasto 2',
-                  price: 35000,
-                  size: '22 Jugadores',
-                  surface: 'Pasto',
-                  period: 30),
-              isAvailable: false,
-              index: 4),
-          SlotPitch(
-              pitch: PitchModel(
-                  name: 'Mini Cancha 2',
-                  price: 6000,
-                  size: '6 Jugadores',
-                  surface: 'Cemento',
-                  period: 30),
-              index: 5)
-        ],
+        itemCount: pitches.length,
+        itemBuilder: (_, i) => SlotPitch(
+          pitch: pitches[i],
+          index: i,
+        ),
       ),
     );
   }
@@ -491,8 +447,8 @@ class _SlotPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final courtProvider = Provider.of<CourtProvider>(context);
-
+    final pickerProvider = Provider.of<PickerSlotProvider>(context);
+    final slots = pickerProvider.getSlots();
     //TODO:validar cuando no hay slots
     //TODO: excluir las horas que ya pasaron
 
@@ -501,10 +457,12 @@ class _SlotPicker extends StatelessWidget {
       child: ListView.builder(
         physics: const BouncingScrollPhysics(),
         scrollDirection: Axis.horizontal,
-        itemCount: courtProvider.slots.length,
-        itemBuilder: (context, i) => SlotTime(
-          index: i,
-          slotHours: courtProvider.slots[i],
+        itemCount: slots.length,
+        itemBuilder: (context, i) => FadeIn(
+          child: SlotTime(
+            index: i,
+            slotHours: slots[i],
+          ),
         ),
       ),
     );

@@ -37,6 +37,8 @@ class UserDB {
           court.pitches = pitches;
           userLogin.adminCourts.add(court);
         }
+      } else {
+        //TODO:cargar las canchas favoritas del usuario
       }
     } catch (error) {
       print(error);

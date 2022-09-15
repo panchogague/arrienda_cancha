@@ -17,4 +17,7 @@ class OpenDayModel {
       OpenDayModel(json["dayId"], json["from"], json["to"]);
 
   String get dayName => FormatHelper.dayOfWeek(dayId);
+
+  double get fromToDouble => FormatHelper.convertHourStringToDouble(from);
+  double get toToDouble => FormatHelper.convertHourStringToDouble(to);
 }

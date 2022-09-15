@@ -20,4 +20,20 @@ class CourtDB {
       return 'Error al guardar la data';
     }
   }
+
+  Future<List<CourtModel>> getCourtsByCategoryId(String categoryId) async {
+    try {
+      final courtsDB = await _db
+          .collection('courts')
+          .where('isActive', isEqualTo: true)
+          .where('categories', arrayContains: categoryId)
+          .get();
+
+      return courtsDB.docs
+          .map((e) => CourtModel.fromFireBase(e.data(), e.id))
+          .toList();
+    } catch (e) {
+      return [];
+    }
+  }
 }

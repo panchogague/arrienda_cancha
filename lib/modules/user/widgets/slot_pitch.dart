@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:court_finder/models/models.dart';
@@ -70,7 +72,9 @@ class SlotPitch extends StatelessWidget {
           ),
           Text(pitch.size!, style: TextStyle(color: textColor, fontSize: 12)),
           Text(
-            pitch.priceFormated,
+            pitch.priceDynamic != null
+                ? pitch.priceDynamiFormated
+                : pitch.priceFormated,
             style: style,
           )
         ]),
