@@ -1,3 +1,4 @@
+export 'package:court_finder/models/booking_model.dart';
 export 'package:court_finder/models/dropdown_value_model.dart';
 export 'package:court_finder/models/open_day_model.dart';
 export 'package:court_finder/models/facility_model.dart';

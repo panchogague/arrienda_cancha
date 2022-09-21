@@ -49,6 +49,12 @@ class MyApp extends StatelessWidget {
               PitchService(court.court != null ? court.court!.pitches : []),
         ),
 
+        ChangeNotifierProxyProvider<AuthService, BookingService>(
+          create: (context) => BookingService(null),
+          update: (context, auth, booking) =>
+              BookingService(auth.userLogin!.userId),
+        ),
+
         //Admin
         ChangeNotifierProxyProvider<CategoryService, PitchesFormProvider>(
           create: (context) => PitchesFormProvider([]),

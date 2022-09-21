@@ -1,5 +1,6 @@
-import 'package:court_finder/modules/user/models/models.dart';
+import 'package:court_finder/models/models.dart';
 import 'package:court_finder/modules/user/providers/providers.dart';
+import 'package:court_finder/services/booking_service.dart';
 import 'package:court_finder/services/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -49,18 +50,32 @@ class ConfirmationBookingScreen extends StatelessWidget {
                     width: size.width * 0.40,
                     height: 50,
                     child: OutlinedButton(
-                        onPressed: () {
-                          //TODO:grabar reserva
+                        onPressed: () async {
+                          final bookingProvider = Provider.of<BookingProvider>(
+                              context,
+                              listen: false);
+                          final pickerService = Provider.of<PickerSlotProvider>(
+                              context,
+                              listen: false);
 
-                          NotificationService.showSnackbar(
-                              'Reserva realizada con éxito');
+                          final bookingService = Provider.of<BookingService>(
+                              context,
+                              listen: false);
 
-                          Navigator.pushReplacementNamed(context, 'home');
-                          Provider.of<BookingProvider>(context, listen: false)
-                              .cleanProverties();
-                          Provider.of<PickerSlotProvider>(context,
-                                  listen: false)
-                              .cleanProperties();
+                          final navigator = Navigator.of(context);
+
+                          final resp =
+                              await bookingService.createBooking(bookingModel);
+
+                          if (resp == null) {
+                            NotificationService.showSnackbar(
+                                'Reserva realizada con éxito');
+                            bookingProvider.cleanProverties();
+                            pickerService.cleanProperties();
+                            navigator.pushReplacementNamed('home');
+                          } else {
+                            NotificationService.showSnackbar(resp);
+                          }
                         },
                         style: ButtonStyle(
                             shape: MaterialStateProperty.all<OutlinedBorder>(
@@ -119,9 +134,9 @@ class _Content extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(booking.court.name,
+                  Text(booking.courtName,
                       style: Theme.of(context).textTheme.headline2),
-                  Text(booking.court.location, style: styleSubtitle),
+                  Text(booking.location, style: styleSubtitle),
                 ],
               ),
             ]),
@@ -154,7 +169,7 @@ class _Content extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      booking.slot.slotToString,
+                      booking.slots.slotToString,
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                     const Text('Hora', style: styleSubtitle)
@@ -176,7 +191,7 @@ class _Content extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      booking.pitch.name,
+                      booking.pitchName,
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                     const Text('Cancha', style: styleSubtitle)
@@ -216,7 +231,7 @@ class _Content extends StatelessWidget {
             ]),
             const SizedBox(height: 10),
             Text(
-              booking.court.cancellationPolicy,
+              booking.cancellationPolicy,
               overflow: TextOverflow.ellipsis,
               maxLines: 4,
               style: Theme.of(context).textTheme.headline4,
@@ -225,7 +240,7 @@ class _Content extends StatelessWidget {
             Align(
               alignment: Alignment.bottomRight,
               child: Text(
-                'Total: ${booking.pitch.priceFormated}',
+                'Total: ${booking.priceFormated}',
                 style: Theme.of(context).textTheme.headline1,
               ),
             )

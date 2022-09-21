@@ -3,7 +3,7 @@ import 'package:court_finder/helpers/format_helper.dart';
 class SlotTimeModel {
   bool isAvailable;
   String to;
-  String from; //TODO: quizas cambiar por tipo hora
+  String from;
 
   String get slotToString {
     return '$from - $to';

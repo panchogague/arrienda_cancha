@@ -1,4 +1,3 @@
-import 'package:court_finder/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -7,7 +6,6 @@ import 'package:maps_launcher/maps_launcher.dart';
 import 'package:court_finder/models/models.dart';
 import 'package:court_finder/modules/user/providers/providers.dart';
 import 'package:court_finder/modules/user/widgets/widgets.dart';
-import 'package:court_finder/modules/user/models/models.dart';
 
 class CourtScreen extends StatelessWidget {
   const CourtScreen({Key? key}) : super(key: key);
@@ -116,11 +114,22 @@ class _Booking extends StatelessWidget {
                               OutlinedButton(
                                 onPressed: () {
                                   final booking = BookingModel(
-                                      court: court,
+                                      courtId: court.id!,
+                                      courtName: court.name,
                                       selectedDate:
                                           bookingProvider.selectedDate,
-                                      slot: bookingProvider.slot,
-                                      pitch: bookingProvider.pitch);
+                                      slots: bookingProvider.slot,
+                                      pitchId: bookingProvider.pitch.id!,
+                                      pitchName: bookingProvider.pitch.name,
+                                      location: court.location,
+                                      cancellationPolicy:
+                                          court.cancellationPolicy,
+                                      price: bookingProvider
+                                                  .pitch.priceDynamic !=
+                                              null
+                                          ? bookingProvider.pitch.priceDynamic!
+                                          : bookingProvider.pitch.price);
+
                                   Navigator.pushNamed(
                                       context, 'confirm_booking',
                                       arguments: booking);
