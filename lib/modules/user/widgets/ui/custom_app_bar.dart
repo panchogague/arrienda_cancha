@@ -1,7 +1,7 @@
-import 'package:court_finder/modules/user/providers/providers.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:court_finder/modules/user/controllers/controllers.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
 import 'package:court_finder/modules/user/widgets/widgets.dart';
 
 class CustomAppBar extends StatelessWidget {
@@ -20,9 +20,8 @@ class CustomAppBar extends StatelessWidget {
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             IconButton(
                 onPressed: () {
-                  final key = Provider.of<UIProvider>(context, listen: false)
-                      .scaffoldKey;
-                  key!.currentState!.openDrawer();
+                  final uiCtrl = Get.find<UIController>();
+                  uiCtrl.scaffoldKey!.currentState!.openDrawer();
                 },
                 icon: const Icon(FontAwesomeIcons.bars)),
             Column(mainAxisAlignment: MainAxisAlignment.center, children: [

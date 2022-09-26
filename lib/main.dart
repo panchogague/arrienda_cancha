@@ -1,10 +1,12 @@
 import 'package:court_finder/modules/admin/providers/providers.dart';
 import 'package:court_finder/modules/admin/screens/screens.dart';
+import 'package:court_finder/modules/auth/controllers/controllers.dart';
 import 'package:court_finder/modules/auth/services/services.dart';
 import 'package:court_finder/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:get/get.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'package:court_finder/theme/my_theme.dart';
@@ -26,9 +28,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(AuthController());
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => UIProvider()),
         ChangeNotifierProvider(create: (_) => PickerSlotProvider()),
         ChangeNotifierProvider(create: (_) => CourtProvider()),
         ChangeNotifierProvider(create: (_) => BookingProvider()),
@@ -37,10 +39,7 @@ class MyApp extends StatelessWidget {
 
         ChangeNotifierProxyProvider<AuthService, CourtService>(
           create: (context) => CourtService(null),
-          update: (context, auth, court) => CourtService(
-              (auth.userLogin!.adminCourts.isNotEmpty)
-                  ? auth.userLogin!.adminCourts[0]
-                  : null),
+          update: (context, auth, court) => CourtService(null),
         ),
 
         ChangeNotifierProxyProvider<CourtService, PitchService>(
@@ -68,7 +67,7 @@ class MyApp extends StatelessWidget {
 
         // ChangeNotifierProvider(create: (_) => PitchesFormProvider())
       ],
-      child: MaterialApp(
+      child: GetMaterialApp(
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
@@ -100,6 +99,12 @@ class MyApp extends StatelessWidget {
           'court_profile': (_) => const CourtProfileScreen(),
           'historial': (_) => const BookingHistoryScreen(),
         },
+        getPages: [
+          GetPage(name: '/search', page: () => const SearchScreen()),
+          GetPage(name: '/dashboard', page: () => const DashboardScreen()),
+          GetPage(name: '/home', page: () => const HomeScreen()),
+          GetPage(name: '/checking', page: () => const CheckAuthScreen()),
+        ],
       ),
     );
   }

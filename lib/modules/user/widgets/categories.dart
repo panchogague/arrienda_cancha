@@ -1,40 +1,41 @@
-import 'package:court_finder/modules/user/providers/providers.dart';
-import 'package:court_finder/services/services.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:court_finder/modules/user/controllers/controllers.dart';
+import 'package:court_finder/controllers/category_controller.dart';
+import 'package:court_finder/controllers/court_controller.dart';
 import 'package:court_finder/models/models.dart';
-import 'package:provider/provider.dart';
 
 class Categories extends StatelessWidget {
   const Categories({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final categoryService = Provider.of<CategoryService>(context);
-    final categories = categoryService.categories;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const _Title(),
-        if (categoryService.isLoading)
-          Center(
-            child: CircularProgressIndicator(
-                color: Theme.of(context).primaryColor),
-          ),
-        Container(
-          padding: const EdgeInsets.all(10),
-          width: double.infinity,
-          height: size.height * 0.30,
-          child: ListView.builder(
-            physics: const BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            itemCount: categories.length,
-            itemBuilder: (_, int i) => _CategoryCard(category: categories[i]),
-          ),
-        ),
-      ],
-    );
+    final categoryCtrl = Get.put(CategoryController());
+    final categories = categoryCtrl.categories;
+    return Obx(() => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const _Title(),
+            if (categoryCtrl.isLoading.value)
+              Center(
+                child: CircularProgressIndicator(
+                    color: Theme.of(context).primaryColor),
+              ),
+            Container(
+              padding: const EdgeInsets.all(10),
+              width: double.infinity,
+              height: Get.height * 0.30,
+              child: ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                itemCount: categories.length,
+                itemBuilder: (_, int i) =>
+                    _CategoryCard(category: categories[i]),
+              ),
+            ),
+          ],
+        ));
   }
 }
 
@@ -77,16 +78,14 @@ class _CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return GestureDetector(
       onTap: () {
-        final courtService = Provider.of<CourtService>(context, listen: false);
-        Provider.of<CourtProvider>(context, listen: false).categoryIdSelected =
-            category.id!;
+        final courtCtrl = Get.put(CourtController());
+        final courtUserCtrl = Get.put(CourtUserController());
+        courtUserCtrl.categoryIdSelected = category.id!;
 
-        courtService.populateCourtsByCategory(category.id!);
-        Navigator.pushNamed(context, 'search', arguments: category);
+        courtCtrl.populateCourtsByCategory(category.id!);
+        Get.toNamed('/search', arguments: category);
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 8),
@@ -97,7 +96,7 @@ class _CategoryCard extends StatelessWidget {
             ),
             Container(
               width: 140,
-              height: size.height * 0.25,
+              height: Get.height * 0.25,
               decoration: BoxDecoration(
                   gradient: LinearGradient(
                       begin: Alignment.topLeft,
@@ -152,7 +151,7 @@ class _CategoryCard extends StatelessWidget {
                 alignment: Alignment.bottomRight,
                 child: Container(
                   width: 100,
-                  height: size.height * 0.10,
+                  height: Get.height * 0.10,
                   decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                     // boxShadow: [
@@ -185,9 +184,7 @@ class _TotalCanchas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    bool showTotal = size.height > 740.0;
-
+    bool showTotal = Get.height > 740.0;
     return showTotal
         ? Column(
             children: [

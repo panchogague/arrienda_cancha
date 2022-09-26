@@ -1,10 +1,9 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:court_finder/modules/auth/controllers/controllers.dart';
 import 'package:court_finder/modules/auth/providers/login_form_provider.dart';
-import 'package:court_finder/modules/auth/services/services.dart';
 import 'package:court_finder/modules/auth/ui/input_decorations.dart';
 import 'package:court_finder/modules/auth/widgets/widgets.dart';
-import 'package:court_finder/services/services.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -22,10 +21,7 @@ class RegisterScreen extends StatelessWidget {
                 const SizedBox(height: 10),
                 Text('Register', style: Theme.of(context).textTheme.headline4),
                 const SizedBox(height: 30),
-                ChangeNotifierProvider(
-                  create: (_) => LoginFormProvider(),
-                  child: const _LoginForm(),
-                )
+                const _LoginForm()
               ]),
             ),
             const SizedBox(height: 50),
@@ -55,17 +51,17 @@ class _LoginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loginForm = Provider.of<LoginFormProvider>(context);
-
-    return Form(
-        key: loginForm.formKey,
+    final loginFormCtrl = Get.find<LoginFormController>();
+    loginFormCtrl.formKey = GlobalKey<FormState>();
+    return Obx(() => Form(
+        key: loginFormCtrl.formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: Column(
           children: [
             TextFormField(
               autocorrect: false,
               keyboardType: TextInputType.emailAddress,
-              onChanged: (value) => loginForm.email = value,
+              onChanged: (value) => loginFormCtrl.email.value = value,
               decoration: InputDecorations.authInputDecoration(
                   hintText: 'john.smith@email.com',
                   labelText: 'Email',
@@ -73,9 +69,7 @@ class _LoginForm extends StatelessWidget {
               validator: (value) {
                 String pattern =
                     r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-
                 RegExp regExp = RegExp(pattern);
-
                 return regExp.hasMatch(value ?? '')
                     ? null
                     : 'Email is not valid';
@@ -86,7 +80,7 @@ class _LoginForm extends StatelessWidget {
               autocorrect: false,
               obscureText: true,
               keyboardType: TextInputType.text,
-              onChanged: (value) => loginForm.password = value,
+              onChanged: (value) => loginFormCtrl.password.value = value,
               decoration: InputDecorations.authInputDecoration(
                   hintText: '****',
                   labelText: 'Password',
@@ -104,38 +98,36 @@ class _LoginForm extends StatelessWidget {
               disabledColor: Colors.grey,
               elevation: 0,
               color: Colors.deepPurple,
-              onPressed: loginForm.isLoading
+              onPressed: loginFormCtrl.isLoading.value
                   ? null
                   : () async {
-                      final navigator = Navigator.of(context);
                       FocusScope.of(context).unfocus();
+                      final authCtrl = Get.find<AuthController>();
 
-                      final authService =
-                          Provider.of<AuthService>(context, listen: false);
+                      if (!loginFormCtrl.isValidForm()) return;
 
-                      if (!loginForm.isValidForm()) return;
+                      loginFormCtrl.isLoading.value = true;
 
-                      loginForm.isLoading = true;
+                      final String? errorMessage = await authCtrl.createUser(
+                          loginFormCtrl.email.value,
+                          loginFormCtrl.password.value);
 
-                      final String? errorMessage = await authService.createUser(
-                          loginForm.email, loginForm.password);
-
+                      loginFormCtrl.isLoading.value = false;
                       if (errorMessage == null) {
-                        navigator.pushReplacementNamed('home');
+                        Get.offAllNamed('/home');
                       } else {
-                        NotificationService.showSnackbar(errorMessage);
-                        loginForm.isLoading = false;
+                        Get.snackbar('Error', errorMessage);
                       }
                     },
               child: Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 80, vertical: 15),
                   child: Text(
-                    loginForm.isLoading ? 'Wait ...' : 'Enter',
+                    loginFormCtrl.isLoading.value ? 'Wait ...' : 'Enter',
                     style: const TextStyle(color: Colors.white),
                   )),
             )
           ],
-        ));
+        )));
   }
 }

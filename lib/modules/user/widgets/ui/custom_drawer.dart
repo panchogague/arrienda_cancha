@@ -1,19 +1,18 @@
-import 'package:court_finder/modules/auth/services/auth_services.dart';
-import 'package:court_finder/modules/user/providers/providers.dart';
-import 'package:court_finder/widgets/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
+
+import 'package:court_finder/modules/auth/controllers/controllers.dart';
+import 'package:court_finder/modules/user/controllers/controllers.dart';
+import 'package:court_finder/widgets/widgets.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final uiProvider = Provider.of<UIProvider>(context);
-
-    final size = MediaQuery.of(context).size;
+    final uiCtrl = Get.find<UIController>();
     const iconColor = Colors.blueGrey;
     TextStyle? style = Theme.of(context).textTheme.headline2;
     return Drawer(
@@ -30,10 +29,10 @@ class CustomDrawer extends StatelessWidget {
           Column(
             children: [
               SizedBox(
-                height: size.height * 0.9,
+                height: Get.height * 0.9,
                 child: ListView(padding: EdgeInsets.zero, children: [
                   const CustomDrawerHeader(),
-                  SizedBox(height: size.height * 0.06),
+                  SizedBox(height: Get.height * 0.06),
                   ListTile(
                     leading: const Icon(
                       Icons.person,
@@ -53,7 +52,7 @@ class CustomDrawer extends StatelessWidget {
                       'Mis Reservas',
                       style: style,
                     ),
-                    onTap: () => uiProvider.currentIndexPage = 1,
+                    onTap: () => uiCtrl.currentIndexPage.value = 1,
                   ),
                   const Divider(),
                   ListTile(
@@ -63,7 +62,7 @@ class CustomDrawer extends StatelessWidget {
                       'Favoritos',
                       style: style,
                     ),
-                    onTap: () => uiProvider.currentIndexPage = 2,
+                    onTap: () => uiCtrl.currentIndexPage.value = 2,
                   ),
                   const Divider(),
                   ListTile(
@@ -88,8 +87,9 @@ class CustomDrawer extends StatelessWidget {
                   style: style,
                 ),
                 onTap: () {
-                  Provider.of<AuthService>(context, listen: false).logout();
-                  Navigator.pushReplacementNamed(context, 'login');
+                  final authCtrl = Get.find<AuthController>();
+                  authCtrl.logout();
+                  Get.offAllNamed('/login');
                 },
               ),
               const SizedBox(

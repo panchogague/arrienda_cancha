@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
+import 'package:court_finder/modules/user/controllers/ui_controller.dart';
 import 'package:court_finder/modules/user/screens/screens.dart';
-import 'package:court_finder/modules/user/providers/ui_provider.dart';
 import 'package:court_finder/modules/user/widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -10,8 +10,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final key = GlobalKey<ScaffoldState>();
-    final uiProvider = Provider.of<UIProvider>(context);
-    uiProvider.scaffoldKey = key;
+    final uiCtrl = Get.put(UIController());
+    uiCtrl.scaffoldKey = key;
 
     //Tabs pages
     const pages = [
@@ -21,13 +21,13 @@ class HomeScreen extends StatelessWidget {
       MyProfileScreen()
     ];
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      key: key,
-      drawer: const CustomDrawer(),
-      body: pages[uiProvider.currentIndexPage],
-      bottomNavigationBar: const BottomNavbar(),
-    );
+    return Obx(() => Scaffold(
+          resizeToAvoidBottomInset: false,
+          key: key,
+          drawer: const CustomDrawer(),
+          body: pages[uiCtrl.currentIndexPage.value],
+          bottomNavigationBar: const BottomNavbar(),
+        ));
   }
 }
 

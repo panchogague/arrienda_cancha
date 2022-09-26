@@ -1,6 +1,8 @@
+import 'package:court_finder/modules/user/controllers/controllers.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:court_finder/models/models.dart';
@@ -15,13 +17,13 @@ class CourtScreen extends StatelessWidget {
     final CourtModel court =
         ModalRoute.of(context)!.settings.arguments as CourtModel;
 
-    final courtProvider = Provider.of<CourtProvider>(context, listen: false);
+    final courtUserCtrl = Get.find<CourtUserController>();
 
-    if (courtProvider.courtSelected != null &&
-        courtProvider.courtSelected?.id != court.id) {
+    if (courtUserCtrl.courtSelected != null &&
+        courtUserCtrl.courtSelected?.id != court.id) {
       cleanProviders(context);
     }
-    courtProvider.courtSelected = court;
+    courtUserCtrl.courtSelected = court;
     Provider.of<PickerSlotProvider>(context, listen: false).courtSelected =
         court;
 
@@ -272,8 +274,7 @@ class _Information extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final court =
-        Provider.of<CourtProvider>(context, listen: false).courtSelected;
+    final court = Get.find<CourtUserController>().courtSelected;
     return Container(
       width: double.infinity,
       color: const Color(0xffF0EEEF),
@@ -364,8 +365,8 @@ class _FacilitiesInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final courtProvider = Provider.of<CourtProvider>(context, listen: false);
-    final facilities = courtProvider.getFacilities();
+    final courtUserCtrl = Get.find<CourtUserController>();
+    final facilities = courtUserCtrl.getFacilities();
     return Container(
       margin: const EdgeInsets.all(10),
       child: Column(
@@ -379,19 +380,19 @@ class _FacilitiesInfo extends StatelessWidget {
               ),
               style: Theme.of(context).textTheme.headline5),
           const SizedBox(height: 10),
-          SizedBox(
-            height: 120,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                itemCount: facilities.length,
-                itemBuilder: (_, int i) => FacilityCard(
-                    icon: facilities[i].icon, title: facilities[i].name),
-              ),
-            ),
-          )
+          Obx(() => SizedBox(
+                height: 120,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: facilities.length,
+                    itemBuilder: (_, int i) => FacilityCard(
+                        icon: facilities[i].icon, title: facilities[i].name),
+                  ),
+                ),
+              ))
         ],
       ),
     );
@@ -433,19 +434,19 @@ class _PitchPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pitches = Provider.of<CourtProvider>(context).courtSelected!.pitches;
-    return SizedBox(
-      height: 100,
-      child: ListView.builder(
-        physics: const BouncingScrollPhysics(),
-        scrollDirection: Axis.horizontal,
-        itemCount: pitches.length,
-        itemBuilder: (_, i) => SlotPitch(
-          pitch: pitches[i],
-          index: i,
-        ),
-      ),
-    );
+    final pitches = Get.find<CourtUserController>().courtSelected!.pitches;
+    return Obx(() => SizedBox(
+          height: 100,
+          child: ListView.builder(
+            physics: const BouncingScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            itemCount: pitches.length,
+            itemBuilder: (_, i) => SlotPitch(
+              pitch: pitches[i],
+              index: i,
+            ),
+          ),
+        ));
   }
 }
 
